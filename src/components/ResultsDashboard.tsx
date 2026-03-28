@@ -113,10 +113,10 @@ export function ResultsDashboard({ data, onRestart }: Props) {
             <tr style={{ background: 'rgba(0,0,0,0.3)', fontWeight: 'bold', borderTop: '2px solid var(--accent-color)', fontSize: '0.95rem' }}>
               <td style={{ padding: '1rem', textAlign: 'left', whiteSpace: 'nowrap' }}>Totais</td>
               <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{formatBRL(totais.bruto)}</td>
-              <td style={{ padding: '1rem', color: '#ef4444', whiteSpace: 'nowrap' }}>{totais.inss > 0 ? `-${formatBRL(totais.inss)}` : 'R$ 0,00'}</td>
-              <td style={{ padding: '1rem', color: '#ef4444', whiteSpace: 'nowrap' }}>{totais.irrf > 0 ? `-${formatBRL(totais.irrf)}` : 'R$ 0,00'}</td>
-              <td style={{ padding: '1rem', color: '#ef4444', whiteSpace: 'nowrap' }}>{totais.descontos > 0 ? `-${formatBRL(totais.descontos)}` : 'R$ 0,00'}</td>
-              <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{formatBRL(totais.liquido)}</td>
+              <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{totais.inss > 0 ? `-${formatBRL(totais.inss)}` : 'R$ 0,00'}</td>
+              <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{totais.irrf > 0 ? `-${formatBRL(totais.irrf)}` : 'R$ 0,00'}</td>
+              <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{totais.descontos > 0 ? `-${formatBRL(totais.descontos)}` : 'R$ 0,00'}</td>
+              <td style={{ padding: '1rem', color: '#ef4444', whiteSpace: 'nowrap' }}>{formatBRL(totais.liquido)}</td>
               <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{formatBRL(totais.ticket)}</td>
               <td style={{ padding: '1rem', color: 'var(--accent-color)', whiteSpace: 'nowrap' }}>{formatBRL(totais.saldo_conta)}</td>
               <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{formatBRL(totais.previdencia)}</td>
