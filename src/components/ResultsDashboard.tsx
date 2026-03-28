@@ -69,10 +69,10 @@ export function ResultsDashboard({ data, onRestart }: Props) {
             <tr style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
               <th className="sticky-header" style={{ padding: '1rem', textAlign: 'left', whiteSpace: 'nowrap' }}>Evento</th>
               <th className="sticky-header" style={{ padding: '1rem', whiteSpace: 'nowrap' }}>(1) Salário Bruto</th>
-              <th className="sticky-header" style={{ padding: '1rem', color: '#ef4444', whiteSpace: 'nowrap' }}>(2) INSS</th>
-              <th className="sticky-header" style={{ padding: '1rem', color: '#ef4444', whiteSpace: 'nowrap' }}>(3) IRRF</th>
-              <th className="sticky-header" style={{ padding: '1rem', color: '#ef4444', whiteSpace: 'nowrap' }}>(4) Descontos</th>
-              <th className="sticky-header" style={{ padding: '1rem', whiteSpace: 'nowrap' }}>(5) Salário Líquido</th>
+              <th className="sticky-header" style={{ padding: '1rem', whiteSpace: 'nowrap' }}>(2) INSS</th>
+              <th className="sticky-header" style={{ padding: '1rem', whiteSpace: 'nowrap' }}>(3) IRRF</th>
+              <th className="sticky-header" style={{ padding: '1rem', whiteSpace: 'nowrap' }}>(4) Descontos</th>
+              <th className="sticky-header" style={{ padding: '1rem', color: '#ef4444', whiteSpace: 'nowrap' }}>(5) Salário Líquido</th>
               <th className="sticky-header" style={{ padding: '1rem', whiteSpace: 'nowrap' }}>(6) Ticket</th>
               <th className="sticky-header" style={{ padding: '1rem', color: 'var(--accent-color)', whiteSpace: 'nowrap' }}>(7) Saldo Conta</th>
               <th className="sticky-header" style={{ padding: '1rem', whiteSpace: 'nowrap' }}>(8) Previdência</th>
