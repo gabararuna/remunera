@@ -22,22 +22,22 @@ export default function App() {
           Criado por Gabriel Araruna
         </a>
         <h1 style={{ fontSize: '2.5rem', fontWeight: 800, color: '#ffffff' }}>
-          Salário Justo
+          Remunera
         </h1>
         <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem' }}>Projete sua remuneração real CLT de forma inteligente</p>
-        
+
         {step < 6 && (
           <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'center', gap: '8px' }}>
             {[1, 2, 3, 4, 5].map(s => (
-              <div 
-                key={s} 
-                style={{ 
-                  width: '40px', 
-                  height: '6px', 
-                  borderRadius: '3px', 
+              <div
+                key={s}
+                style={{
+                  width: '40px',
+                  height: '6px',
+                  borderRadius: '3px',
                   background: s <= step ? 'var(--accent-color)' : 'rgba(255,255,255,0.1)',
                   transition: 'background 0.3s ease'
-                }} 
+                }}
               />
             ))}
           </div>
