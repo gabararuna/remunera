@@ -94,10 +94,10 @@ export function ResultsDashboard({ data, onRestart }: Props) {
                     <div style={{ color: 'var(--accent-color)', fontSize: '0.85rem' }}>{r.descricao}</div>
                   </td>
                   <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{formatBRL(r.bruto)}</td>
-                  <td style={{ padding: '1rem', color: '#ef4444', whiteSpace: 'nowrap' }}>{r.inss > 0 ? `-${formatBRL(r.inss)}` : 'R$ 0,00'}</td>
-                  <td style={{ padding: '1rem', color: '#ef4444', whiteSpace: 'nowrap' }}>{r.irrf > 0 ? `-${formatBRL(r.irrf)}` : 'R$ 0,00'}</td>
-                  <td style={{ padding: '1rem', color: '#ef4444', whiteSpace: 'nowrap' }}>{r.descontos > 0 ? `-${formatBRL(r.descontos)}` : 'R$ 0,00'}</td>
-                  <td style={{ padding: '1rem', fontWeight: 600, whiteSpace: 'nowrap' }}>{formatBRL(r.liquido)}</td>
+                  <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{r.inss > 0 ? `-${formatBRL(r.inss)}` : 'R$ 0,00'}</td>
+                  <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{r.irrf > 0 ? `-${formatBRL(r.irrf)}` : 'R$ 0,00'}</td>
+                  <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{r.descontos > 0 ? `-${formatBRL(r.descontos)}` : 'R$ 0,00'}</td>
+                  <td style={{ padding: '1rem', color: '#ef4444', fontWeight: 600, whiteSpace: 'nowrap' }}>{formatBRL(r.liquido)}</td>
                   <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{formatBRL(r.ticket)}</td>
                   <td style={{ padding: '1rem', color: 'var(--accent-color)', fontWeight: 600, whiteSpace: 'nowrap' }}>{formatBRL(saldo_conta)}</td>
                   <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{formatBRL(r.previdencia)}</td>
