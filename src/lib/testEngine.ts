@@ -27,7 +27,14 @@ const dadosFixos: SalaryParams = {
   ferias: [
     { inicio: new Date(2027, 1, 1), dias: 5 },
     { inicio: new Date(2027, 7, 23), dias: 15 }
-  ]
+  ],
+  simular_demissao: false,
+  tipo_demissao: 'pedido_demissao',
+  data_demissao: null,
+  data_admissao: null,
+  saldo_fgts: 0,
+  ferias_vencidas_dias: 0,
+  aviso_previo_trabalhado: false,
 };
 
 const resultados = calcularProjecao(dadosFixos);
