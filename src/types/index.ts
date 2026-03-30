@@ -3,6 +3,8 @@ export interface VacationPeriod {
   dias: number;
 }
 
+export type TipoDemissao = 'pedido_demissao' | 'justa_causa' | 'sem_justa_causa';
+
 export interface SalaryParams {
   data_inicio: Date;
   meses_projecao: number;
@@ -29,6 +31,15 @@ export interface SalaryParams {
   dias_abono?: number;
   dia_pagamento: 'ultimo' | number;
   ferias: VacationPeriod[];
+
+  // Simulação de demissão
+  simular_demissao: boolean;
+  tipo_demissao: TipoDemissao;
+  data_demissao: Date | null;
+  data_admissao: Date | null;       // para cálculo do tempo de serviço e aviso prévio
+  saldo_fgts: number;               // saldo de FGTS acumulado (para calcular multa 40%)
+  ferias_vencidas_dias: number;     // dias de férias vencidas não gozadas
+  aviso_previo_trabalhado: boolean; // se vai trabalhar o aviso prévio (ou ser indenizado)
 }
 
 export interface Receipt {
@@ -43,4 +54,25 @@ export interface Receipt {
   previdencia: number;
   fgts: number;
   beneficios: number;
+}
+
+export interface RescisaoVerba {
+  descricao: string;
+  bruto: number;
+  inss: number;
+  irrf: number;
+  liquido: number;
+  tributavel: boolean;
+  tooltip?: string;
+}
+
+export interface RescisaoResult {
+  verbas: RescisaoVerba[];
+  totalBruto: number;
+  totalInss: number;
+  totalIrrf: number;
+  totalLiquido: number;
+  diasAvisoPrevio: number;
+  multaFgts: number;
+  fgtsTotal: number; // acumulado + multa
 }

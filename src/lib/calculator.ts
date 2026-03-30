@@ -1,4 +1,4 @@
-import type { SalaryParams, Receipt } from '../types';
+import type { SalaryParams, Receipt, RescisaoResult, RescisaoVerba } from '../types';
 
 export const TABELA_INSS = [
   { limite: 1621, aliquota: 7.5 },
@@ -187,7 +187,18 @@ export function calcularProjecao(dados: SalaryParams): Receipt[] {
   let projected13ForYear: { [key: number]: boolean } = {};
 
   const startMeses = dados.data_inicio ? dados.data_inicio : new Date();
-  const totalMeses = dados.meses_projecao > 0 ? dados.meses_projecao : 12;
+
+  // Quando simula demissão, corta a projeção no mês ANTERIOR ao da demissão.
+  // O mês da demissão e as verbas rescisórias são exibidos na seção de rescisão.
+  let totalMeses = dados.meses_projecao > 0 ? dados.meses_projecao : 12;
+  if (dados.simular_demissao && dados.data_demissao && !isNaN(dados.data_demissao.getTime())) {
+    const dem = dados.data_demissao;
+    // Meses do mês inicial ao mês imediatamente ANTES da demissão
+    const mesesAteDem =
+      (dem.getFullYear() - startMeses.getFullYear()) * 12 +
+      (dem.getMonth() - startMeses.getMonth());
+    totalMeses = Math.max(0, mesesAteDem);
+  }
 
   for (let m = 0; m < totalMeses; m++) {
     let dataAtual = new Date(startMeses.getFullYear(), startMeses.getMonth() + m, 1);
@@ -196,7 +207,8 @@ export function calcularProjecao(dados: SalaryParams): Receipt[] {
 
     const hasRaise = appliesRaise(dataAtual, dados.mes_aumento);
 
-    if (!projected13ForYear[ano_corrente] && (mes === 11 || mes === 12)) {
+    // Pula 13º quando há simulação de demissão (será calculado como 13º proporcional na rescisão)
+    if (!dados.simular_demissao && !projected13ForYear[ano_corrente] && (mes === 11 || mes === 12)) {
       projected13ForYear[ano_corrente] = true;
       const dec13Date = new Date(ano_corrente, 11, 1);
       const objRaise = appliesRaise(dec13Date, dados.mes_aumento);
@@ -297,4 +309,175 @@ export function calcularProjecao(dados: SalaryParams): Receipt[] {
   const validReceipts = recebimentos.filter(r => r.data.getTime() >= validStart.getTime() && r.data.getTime() <= validEnd.getTime());
 
   return validReceipts.sort((a, b) => a.data.getTime() - b.data.getTime());
+}
+
+// ───────────────────────────────────────────────────────────────
+// CÁLCULO RESCISÓRIO
+// ───────────────────────────────────────────────────────────────
+
+/**
+ * Calcula dias de aviso prévio proporcional conforme Lei 12.506/2011.
+ * 30 dias + 3 dias por ano completo trabalhado (máx 90 dias).
+ */
+export function calcularDiasAvisoPrevio(dataAdmissao: Date, dataDemissao: Date): number {
+  const diffMs = dataDemissao.getTime() - dataAdmissao.getTime();
+  const anosCompletos = Math.floor(diffMs / (1000 * 60 * 60 * 24 * 365.25));
+  return Math.min(90, 30 + anosCompletos * 3);
+}
+
+/**
+ * Retorna quantos meses completos foram trabalhados no período aquisitivo atual.
+ * Usa o aniversário da data de admissão como marco de início do período (máx 11).
+ */
+export function calcularFeriasProporcionaisMeses(dataAdmissao: Date, dataDemissao: Date): number {
+  let aniverAtual = new Date(dataAdmissao);
+  // Avança até o primeiro aniversário APÓS a demissão
+  while (aniverAtual <= dataDemissao) {
+    aniverAtual = new Date(aniverAtual.getFullYear() + 1, aniverAtual.getMonth(), aniverAtual.getDate());
+  }
+  // Recua um ano = início do período aquisitivo atual
+  const inicioAquisitivo = new Date(aniverAtual.getFullYear() - 1, aniverAtual.getMonth(), aniverAtual.getDate());
+  const meses =
+    (dataDemissao.getFullYear() - inicioAquisitivo.getFullYear()) * 12 +
+    (dataDemissao.getMonth() - inicioAquisitivo.getMonth());
+  return Math.min(11, Math.max(0, meses));
+}
+
+export function calcularRescisao(dados: SalaryParams): RescisaoResult {
+  const {
+    tipo_demissao,
+    data_demissao,
+    data_admissao,
+    salario_bruto,
+    aumento_percentual,
+    mes_aumento,
+    dependentes,
+    saldo_fgts,
+    ferias_vencidas_dias,
+    aviso_previo_trabalhado,
+  } = dados;
+
+  if (!data_demissao || !data_admissao) return { verbas: [], totalBruto: 0, totalInss: 0, totalIrrf: 0, totalLiquido: 0, diasAvisoPrevio: 0, multaFgts: 0, fgtsTotal: 0 };
+
+  // Usa a função exportada para calcular avos de férias proporcionais
+  const ferias_proporcionais_meses = calcularFeriasProporcionaisMeses(data_admissao, data_demissao);
+
+  const increaseMultiplier = 1 + ((aumento_percentual || 0) / 100);
+  const hasRaise = mes_aumento ? data_demissao >= mes_aumento : false;
+  const salario = hasRaise ? salario_bruto * increaseMultiplier : salario_bruto;
+
+  const verbas: RescisaoVerba[] = [];
+
+  // ── Dias do mês trabalhado no mês da demissão ─────────────────
+  const diasDemissao = data_demissao.getDate();
+  const saldoSalarioBruto = (salario / 30) * diasDemissao;
+  const inss_saldo = calcular_inss(saldoSalarioBruto);
+  const irrf_saldo = calcular_irrf(saldoSalarioBruto - inss_saldo, dependentes);
+  verbas.push({
+    descricao: `Saldo de Salário (${diasDemissao} dias)`,
+    bruto: saldoSalarioBruto,
+    inss: inss_saldo,
+    irrf: irrf_saldo,
+    liquido: saldoSalarioBruto - inss_saldo - irrf_saldo,
+    tributavel: true,
+    tooltip: 'Salário proporcional aos dias trabalhados no mês da demissão.',
+  });
+
+  // ── Aviso prévio ─────────────────────────────────────────────
+  const diasAviso = calcularDiasAvisoPrevio(data_admissao, data_demissao);
+  let multaFgts = 0;
+  let avisoBruto = 0;
+
+  if (tipo_demissao === 'sem_justa_causa') {
+    // Indenizado: empresa paga os dias à mais
+    if (!aviso_previo_trabalhado) {
+      avisoBruto = (salario / 30) * diasAviso;
+      const inss_aviso = calcular_inss(avisoBruto);
+      const irrf_aviso = calcular_irrf(avisoBruto - inss_aviso, dependentes);
+      verbas.push({
+        descricao: `Aviso Prévio Indenizado (${diasAviso} dias)`,
+        bruto: avisoBruto,
+        inss: inss_aviso,
+        irrf: irrf_aviso,
+        liquido: avisoBruto - inss_aviso - irrf_aviso,
+        tributavel: true,
+        tooltip: 'Aviso prévio indenizado conforme Lei 12.506/2011.',
+      });
+    }
+
+    // Multa rescisória de 40% sobre FGTS
+    multaFgts = saldo_fgts * 0.4;
+  }
+
+  // ── Férias Vencidas (não gozadas) ─────────────────────────────
+  // Qualquer tipo de demissão (exceto justa causa recebe férias vencidas)
+  if (tipo_demissao !== 'justa_causa' || ferias_vencidas_dias > 0) {
+    if (ferias_vencidas_dias > 0) {
+      const feriasVenBruto = (salario / 30) * ferias_vencidas_dias;
+      const tercoVen = feriasVenBruto / 3;
+      const totalFeriasVen = feriasVenBruto + tercoVen;
+      const inss_fv = tipo_demissao === 'justa_causa' ? 0 : calcular_inss(totalFeriasVen);
+      const irrf_fv = tipo_demissao === 'justa_causa' ? 0 : calcular_irrf(totalFeriasVen - inss_fv, dependentes);
+      verbas.push({
+        descricao: `Férias Vencidas + 1/3 (${ferias_vencidas_dias}d)`,
+        bruto: totalFeriasVen,
+        inss: inss_fv,
+        irrf: irrf_fv,
+        liquido: totalFeriasVen - inss_fv - irrf_fv,
+        tributavel: tipo_demissao !== 'justa_causa',
+        tooltip: 'Férias vencidas não gozadas + adicional de 1/3. Na justa causa, isenta de INSS/IRRF.',
+      });
+    }
+  }
+
+  // ── Férias Proporcionais ──────────────────────────────────────
+  // Pedido de demissão e sem justa causa recebem férias proporcionais
+  // Justa causa NÃO recebe férias proporcionais
+  if (tipo_demissao !== 'justa_causa' && ferias_proporcionais_meses > 0) {
+    const feriasPropBruto = (salario / 12) * ferias_proporcionais_meses;
+    const tercoProp = feriasPropBruto / 3;
+    const totalFeriasProp = feriasPropBruto + tercoProp;
+    const inss_fp = calcular_inss(totalFeriasProp);
+    const irrf_fp = calcular_irrf(totalFeriasProp - inss_fp, dependentes);
+    verbas.push({
+      descricao: `Férias Proporcionais + 1/3 (${ferias_proporcionais_meses}/12 avos)`,
+      bruto: totalFeriasProp,
+      inss: inss_fp,
+      irrf: irrf_fp,
+      liquido: totalFeriasProp - inss_fp - irrf_fp,
+      tributavel: true,
+      tooltip: `Férias proporcionais referente a ${ferias_proporcionais_meses} ${ferias_proporcionais_meses === 1 ? 'mês' : 'meses'} no período aquisitivo vigente.`,
+    });
+  }
+
+  // ── 13º Proporcional ──────────────────────────────────────────
+  // Pedido de demissão e sem justa causa recebem 13º proporcional
+  // Justa causa NÃO recebe 13º proporcional
+  if (tipo_demissao !== 'justa_causa') {
+    // Meses trabalhados no ano da demissão
+    const mesesTrabalhados = data_demissao.getMonth() + 1; // 1 a 12
+    const decimo13Bruto = (salario / 12) * mesesTrabalhados;
+    const inss_13 = calcular_inss(decimo13Bruto);
+    const irrf_13 = calcular_irrf(decimo13Bruto - inss_13, dependentes);
+    verbas.push({
+      descricao: `13º Proporcional (${mesesTrabalhados}/12 avos)`,
+      bruto: decimo13Bruto,
+      inss: inss_13,
+      irrf: irrf_13,
+      liquido: decimo13Bruto - inss_13 - irrf_13,
+      tributavel: true,
+      tooltip: `13º salário proporcional ao meses trabalhados em ${data_demissao.getFullYear()}.`,
+    });
+  }
+
+  // ── Multa FGTS (40%) — exibida como linha informativa ─────────
+  const fgtsTotal = saldo_fgts + multaFgts;
+
+  // Totais
+  const totalBruto = verbas.reduce((s, v) => s + v.bruto, 0);
+  const totalInss = verbas.reduce((s, v) => s + v.inss, 0);
+  const totalIrrf = verbas.reduce((s, v) => s + v.irrf, 0);
+  const totalLiquido = verbas.reduce((s, v) => s + v.liquido, 0);
+
+  return { verbas, totalBruto, totalInss, totalIrrf, totalLiquido, diasAvisoPrevio: diasAviso, multaFgts, fgtsTotal };
 }

@@ -53,7 +53,7 @@ export function DescontosStep({ data, update, onNext, onBack }: Props) {
 
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2rem' }}>
         <button className="btn-primary" style={{ background: 'transparent', border: '1px solid var(--card-border)' }} onClick={onBack}>&larr; Voltar</button>
-        <button className="btn-primary" style={{ background: 'var(--success-color)' }} onClick={onNext}>Gerar Projeção</button>
+        <button className="btn-primary" onClick={onNext}>Próximo Passo &rarr;</button>
       </div>
     </div>
   );

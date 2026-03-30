@@ -25,7 +25,16 @@ const defaultParams: SalaryParams = {
   dependentes: 0,
   vender_abono: false,
   dia_pagamento: 'ultimo',
-  ferias: []
+  ferias: [],
+
+  // Simulação de demissão
+  simular_demissao: false,
+  tipo_demissao: 'pedido_demissao',
+  data_demissao: null,
+  data_admissao: null,
+  saldo_fgts: 0,
+  ferias_vencidas_dias: 0,
+  aviso_previo_trabalhado: false,
 };
 
 // Reviver datas from JSON string
