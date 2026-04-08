@@ -10,11 +10,11 @@ interface Props {
 export function PeriodoStep({ data, update, onNext }: Props) {
   return (
     <div className="glass-card animate-fade-in">
-      <h2 style={{ marginBottom: '1.5rem', color: 'var(--accent-color)' }}>Passo 1: Período e Premissas</h2>
+      <h2 style={{ marginBottom: '1.5rem', color: 'var(--accent-color)', fontSize: '1.15rem', fontWeight: 500 }}>Passo 1: Período e Premissas</h2>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
         <div>
-          <p style={{ marginBottom: '0.5rem', fontSize: '0.9rem' }}>Data Inicial</p>
+          <label className="field-label">Data Inicial</label>
           <input
             type="date"
             className="input-field"
@@ -23,7 +23,7 @@ export function PeriodoStep({ data, update, onNext }: Props) {
           />
         </div>
         <div>
-          <p style={{ marginBottom: '0.5rem', fontSize: '0.9rem' }}>Meses a Projetar</p>
+          <label className="field-label">Meses a Projetar</label>
           <MathInput
             value={data.meses_projecao}
             onChange={(val) => update('meses_projecao', val)}
@@ -32,11 +32,11 @@ export function PeriodoStep({ data, update, onNext }: Props) {
         </div>
       </div>
 
-      <div style={{ marginBottom: '1.5rem', padding: '1rem', background: 'rgba(0,0,0,0.2)', borderRadius: '12px' }}>
-        <p style={{ marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: 600 }}>Previsão de Aumento</p>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+      <div style={{ marginBottom: '2rem', padding: '1.5rem', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.05)', borderRadius: '16px' }}>
+        <label className="field-label" style={{ fontSize: '0.8rem', color: 'var(--accent-color)' }}>Previsão de Aumento</label>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
           <div>
-            <p style={{ marginBottom: '0.5rem', fontSize: '0.85rem' }}>Aumento (%)</p>
+            <label className="field-label">Aumento (%)</label>
             <MathInput
               value={data.aumento_percentual}
               onChange={(val) => update('aumento_percentual', val)}
@@ -44,7 +44,7 @@ export function PeriodoStep({ data, update, onNext }: Props) {
             />
           </div>
           <div>
-            <p style={{ marginBottom: '0.5rem', fontSize: '0.85rem' }}>Mês de Efetivação</p>
+            <label className="field-label">Mês de Efetivação</label>
             <input
               type="month"
               className="input-field"
@@ -56,7 +56,7 @@ export function PeriodoStep({ data, update, onNext }: Props) {
       </div>
 
       <div style={{ marginBottom: '1rem' }}>
-        <p style={{ marginBottom: '0.5rem', fontSize: '0.9rem' }}>Salário Bruto Inicial (R$)</p>
+        <label className="field-label">Salário Bruto Inicial (R$)</label>
         <MathInput
           value={data.salario_bruto || 0}
           onChange={(val) => update('salario_bruto', val)}
@@ -65,7 +65,7 @@ export function PeriodoStep({ data, update, onNext }: Props) {
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '2rem' }}>
-        <button className="btn-primary" onClick={onNext} disabled={!data.salario_bruto}>Próximo Passo &rarr;</button>
+        <button className="btn-primary" onClick={onNext} disabled={!data.salario_bruto}>Próximo Passo</button>
       </div>
     </div>
   );

@@ -49,57 +49,58 @@ export function DemissaoStep({ data, update, onNext, onBack }: Props) {
 
   return (
     <div className="glass-card animate-fade-in">
-      <h2 style={{ marginBottom: '0.5rem', color: 'var(--accent-color)' }}>Passo 6: Simulação de Demissão</h2>
-      <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
+      <h2 style={{ marginBottom: '1rem', color: 'var(--accent-color)', fontSize: '1.15rem', fontWeight: 500 }}>Passo 6: Simulação de Demissão</h2>
+      <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', marginBottom: '2.5rem' }}>
         Opcional — simule quanto você receberia em caso de encerramento do contrato.
       </p>
 
       {/* Toggle principal */}
-      <div style={{ marginBottom: '1.5rem', padding: '1rem', background: 'rgba(0,0,0,0.2)', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+      <div style={{ marginBottom: '2.5rem', padding: '1.5rem', background: 'rgba(255, 255, 255, 0.02)', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.05)', display: 'flex', alignItems: 'center', gap: '16px' }}>
         <input
           type="checkbox"
           id="simular_demissao"
           checked={data.simular_demissao}
           onChange={(e) => update('simular_demissao', e.target.checked)}
-          style={{ width: '20px', height: '20px', accentColor: 'var(--accent-color)', flexShrink: 0 }}
+          style={{ width: '22px', height: '22px', accentColor: 'var(--accent-color)', flexShrink: 0 }}
         />
-        <label htmlFor="simular_demissao" style={{ fontWeight: 600, cursor: 'pointer', fontSize: '1rem' }}>
+        <label htmlFor="simular_demissao" style={{ fontWeight: 400, cursor: 'pointer', fontSize: '0.95rem' }}>
           Quero simular o recebimento de verbas rescisórias
         </label>
       </div>
 
       {data.simular_demissao && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+        <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
 
           {/* Tipo de demissão */}
           <div>
-            <p style={{ marginBottom: '0.75rem', fontWeight: 600, fontSize: '0.95rem' }}>Qual é o tipo de demissão?</p>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '0.75rem' }}>
+            <p style={{ marginBottom: '1rem', fontWeight: 500, fontSize: '1rem' }}>Qual é o tipo de demissão?</p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
               {(Object.entries(TIPO_LABELS) as [TipoDemissao, typeof TIPO_LABELS[TipoDemissao]][]).map(([key, info]) => (
                 <button
                   key={key}
                   onClick={() => update('tipo_demissao', key)}
                   style={{
-                    padding: '1rem',
-                    borderRadius: '12px',
-                    border: `2px solid ${tipo === key ? info.color : 'rgba(255,255,255,0.1)'}`,
-                    background: tipo === key ? `${info.color}18` : 'rgba(0,0,0,0.2)',
+                    padding: '1.5rem',
+                    borderRadius: '16px',
+                    border: `1px solid ${tipo === key ? info.color : 'rgba(255,255,255,0.08)'}`,
+                    background: tipo === key ? `${info.color}15` : 'rgba(255,255,255,0.02)',
                     cursor: 'pointer',
                     textAlign: 'left',
-                    transition: 'all 0.2s ease',
+                    transition: 'all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                    boxShadow: tipo === key ? `0 0 20px ${info.color}20` : 'none',
                   }}
                 >
-                  <div style={{ fontWeight: 700, color: tipo === key ? info.color : 'var(--text-primary)', marginBottom: '4px' }}>{info.label}</div>
-                  <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', lineHeight: 1.4 }}>{info.desc}</div>
+                  <div style={{ fontWeight: 500, color: tipo === key ? info.color : 'var(--text-primary)', marginBottom: '4px', fontSize: '1rem' }}>{info.label}</div>
+                  <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>{info.desc}</div>
                 </button>
               ))}
             </div>
           </div>
 
           {/* Datas */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
             <div>
-              <p style={{ marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: 500 }}>Data de Admissão</p>
+              <label className="field-label">Data de Admissão</label>
               <input
                 type="date"
                 className="input-field"
@@ -108,7 +109,7 @@ export function DemissaoStep({ data, update, onNext, onBack }: Props) {
               />
             </div>
             <div>
-              <p style={{ marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: 500 }}>Data de Demissão</p>
+              <label className="field-label">Data de Demissão</label>
               <input
                 type="date"
                 className="input-field"
@@ -118,47 +119,46 @@ export function DemissaoStep({ data, update, onNext, onBack }: Props) {
             </div>
           </div>
 
-          {/* Férias proporcionais — exibe auto-calculado quando datas estão preenchidas */}
+          {/* Férias proporcionais */}
           {!isJustaCausa && feriasAvos !== null && (
-            <div style={{ padding: '1rem', background: 'rgba(0,0,0,0.15)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.07)' }}>
-              <p style={{ fontWeight: 600, fontSize: '0.9rem', marginBottom: '4px' }}>Férias Proporcionais</p>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                {feriasAvos} {feriasAvos === 1 ? 'avo' : 'avos'} — calculado automaticamente
-                com base nas datas de admissão e demissão.
+            <div style={{ padding: '1.5rem', background: 'rgba(255, 255, 255, 0.02)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
+              <p style={{ fontWeight: 500, fontSize: '0.95rem', marginBottom: '6px' }}>Férias Proporcionais</p>
+              <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
+                {feriasAvos} {feriasAvos === 1 ? 'avo' : 'avos'} — calculado automaticamente com base nas datas.
               </p>
             </div>
           )}
 
-          {/* Aviso prévio — só sem justa causa */}
+          {/* Aviso prévio */}
           {isSemJustaCausa && data.data_admissao && data.data_demissao && (
-            <div style={{ padding: '1rem', background: 'rgba(0,0,0,0.15)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.07)' }}>
-              <p style={{ fontWeight: 600, marginBottom: '0.5rem', fontSize: '0.9rem' }}>
+            <div style={{ padding: '1.5rem', background: 'rgba(255, 255, 255, 0.02)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
+              <p style={{ fontWeight: 500, marginBottom: '0.5rem', fontSize: '0.95rem' }}>
                 Aviso Prévio — {diasAviso} dias (Lei 12.506/2011)
               </p>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>
+              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1rem' }}>
                 30 dias base + 3 dias por ano completo trabalhado (máx. 90 dias).
               </p>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <input
                   type="checkbox"
                   id="aviso_trabalhado"
                   checked={data.aviso_previo_trabalhado}
                   onChange={(e) => update('aviso_previo_trabalhado', e.target.checked)}
-                  style={{ width: '18px', height: '18px', accentColor: '#10b981' }}
+                  style={{ width: '20px', height: '20px', accentColor: '#10b981' }}
                 />
-                <label htmlFor="aviso_trabalhado" style={{ fontSize: '0.9rem', cursor: 'pointer' }}>
+                <label htmlFor="aviso_trabalhado" style={{ fontSize: '0.95rem', cursor: 'pointer' }}>
                   Vou trabalhar o aviso prévio (não será indenizado)
                 </label>
               </div>
             </div>
           )}
 
-          {/* Saldo FGTS — só sem justa causa */}
+          {/* Saldo FGTS */}
           {isSemJustaCausa && (
-            <div style={{ padding: '1rem', background: 'rgba(0,0,0,0.2)', borderRadius: '12px' }}>
-              <p style={{ marginBottom: '0.5rem', fontWeight: 600 }}>Saldo do FGTS Acumulado (R$)</p>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>
-                Consulte seu saldo no app FGTS (Caixa Econômica). Será calculada a multa rescisória de 40%.
+            <div style={{ padding: '1.5rem', background: 'rgba(255, 255, 255, 0.02)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
+              <p style={{ marginBottom: '0.5rem', fontWeight: 500, fontSize: '0.95rem' }}>Saldo do FGTS Acumulado (R$)</p>
+              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1rem' }}>
+                Consulte seu saldo no app FGTS. Será calculada a multa rescisória de 40%.
               </p>
               <MathInput
                 value={data.saldo_fgts || 0}
@@ -168,12 +168,12 @@ export function DemissaoStep({ data, update, onNext, onBack }: Props) {
             </div>
           )}
 
-          {/* Férias vencidas — todos os tipos */}
-          <div style={{ padding: '1rem', background: 'rgba(0,0,0,0.2)', borderRadius: '12px' }}>
-            <p style={{ marginBottom: '0.5rem', fontWeight: 600 }}>Férias Vencidas Não Gozadas (dias)</p>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>
-              Se você tem férias vencidas que ainda não tirou, informe o número de dias.{' '}
-              {isJustaCausa ? 'Na justa causa, são pagas sem INSS/IRRF.' : 'São pagas com adicional de 1/3.'}
+          {/* Férias vencidas */}
+          <div style={{ padding: '1.5rem', background: 'rgba(255, 255, 255, 0.02)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
+            <p style={{ marginBottom: '0.5rem', fontWeight: 500, fontSize: '0.95rem' }}>Férias Vencidas Não Gozadas (dias)</p>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1rem' }}>
+              Informe o número de dias se houver férias vencidas.{' '}
+              {isJustaCausa ? 'Na justa causa, são pagas sem encargos.' : 'São pagas com adicional de 1/3.'}
             </p>
             <MathInput
               value={data.ferias_vencidas_dias || 0}
@@ -184,45 +184,45 @@ export function DemissaoStep({ data, update, onNext, onBack }: Props) {
 
           {/* Info box por tipo */}
           <div style={{
-            padding: '1rem',
-            borderRadius: '12px',
-            border: `1px solid ${TIPO_LABELS[tipo].color}30`,
-            background: `${TIPO_LABELS[tipo].color}0d`,
+            padding: '1.5rem',
+            borderRadius: '16px',
+            border: `1px solid ${TIPO_LABELS[tipo].color}40`,
+            background: `${TIPO_LABELS[tipo].color}08`,
           }}>
-            <p style={{ fontWeight: 700, color: TIPO_LABELS[tipo].color, marginBottom: '0.5rem', fontSize: '0.9rem' }}>
-              {TIPO_LABELS[tipo].label} — o que você recebe
+            <p style={{ fontWeight: 600, color: TIPO_LABELS[tipo].color, marginBottom: '1rem', fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '1.2rem' }}>ℹ️</span>
+              {TIPO_LABELS[tipo].label} — O que você recebe
             </p>
             {isPedido && (
-              <ul style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', paddingLeft: '1.2rem', lineHeight: 2 }}>
-                <li>Saldo de salário proporcional ao mês de demissão</li>
+              <ul style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.7)', paddingLeft: '1.5rem', lineHeight: 1.8 }}>
+                <li>Saldo de salário proporcional ao mês</li>
                 <li>Férias vencidas + 1/3 (se houver)</li>
                 <li>Férias proporcionais + 1/3</li>
                 <li>13º proporcional</li>
-                <li style={{ opacity: 0.5 }}>Sem aviso prévio indenizado pela empresa</li>
-                <li style={{ opacity: 0.5 }}>Sem multa de 40% sobre FGTS</li>
-                <li style={{ opacity: 0.5 }}>Sem seguro-desemprego</li>
+                <li style={{ opacity: 0.4 }}>Sem aviso prévio indenizado</li>
+                <li style={{ opacity: 0.4 }}>Sem multa de 40% sobre FGTS</li>
+                <li style={{ opacity: 0.4 }}>Sem seguro-desemprego</li>
               </ul>
             )}
             {isJustaCausa && (
-              <ul style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', paddingLeft: '1.2rem', lineHeight: 2 }}>
-                <li>Saldo de salário proporcional ao mês de demissão</li>
-                <li>Férias vencidas não gozadas (isenta de INSS/IRRF)</li>
-                <li style={{ opacity: 0.5 }}>Sem férias proporcionais</li>
-                <li style={{ opacity: 0.5 }}>Sem 13º proporcional</li>
-                <li style={{ opacity: 0.5 }}>Sem aviso prévio indenizado</li>
-                <li style={{ opacity: 0.5 }}>Sem multa de 40% sobre FGTS</li>
+              <ul style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.7)', paddingLeft: '1.5rem', lineHeight: 1.8 }}>
+                <li>Saldo de salário proporcional ao mês</li>
+                <li>Férias vencidas não gozadas</li>
+                <li style={{ opacity: 0.4 }}>Sem férias proporcionais</li>
+                <li style={{ opacity: 0.4 }}>Sem 13º proporcional</li>
+                <li style={{ opacity: 0.4 }}>Sem aviso prévio</li>
+                <li style={{ opacity: 0.4 }}>Sem multa de 40% sobre FGTS</li>
               </ul>
             )}
             {isSemJustaCausa && (
-              <ul style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', paddingLeft: '1.2rem', lineHeight: 2 }}>
-                <li>Saldo de salário proporcional ao mês de demissão</li>
-                <li>Aviso prévio indenizado ({diasAviso} dias) — se não for trabalhado</li>
+              <ul style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.7)', paddingLeft: '1.5rem', lineHeight: 1.8 }}>
+                <li>Saldo de salário proporcional ao mês</li>
+                <li>Aviso prévio indenizado ({diasAviso} dias) — se indenizado</li>
                 <li>Férias vencidas + 1/3 (se houver)</li>
                 <li>Férias proporcionais + 1/3</li>
                 <li>13º proporcional</li>
-                <li>Multa rescisória de 40% sobre o saldo FGTS</li>
-                <li>Saque do FGTS permitido</li>
-                <li>Direito ao seguro-desemprego (verifique carência)</li>
+                <li style={{ color: '#10b981' }}>Multa rescisória de 40% sobre o saldo FGTS</li>
+                <li style={{ color: '#10b981' }}>Saque do FGTS e Seguro-desemprego</li>
               </ul>
             )}
           </div>
@@ -230,23 +230,23 @@ export function DemissaoStep({ data, update, onNext, onBack }: Props) {
         </div>
       )}
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2.5rem' }}>
         <button
-          className="btn-primary"
-          style={{ background: 'transparent', border: '1px solid var(--card-border)' }}
+          className="btn-secondary"
           onClick={onBack}
         >
-          &larr; Voltar
+          Voltar
         </button>
         <button
           className="btn-primary"
-          style={{ background: 'var(--success-color)', opacity: canProceed ? 1 : 0.5 }}
+          style={{ minWidth: '220px' }}
           onClick={onNext}
           disabled={!canProceed}
         >
-          Gerar Projeção &rarr;
+          Gerar Projeção
         </button>
       </div>
     </div>
   );
 }
+

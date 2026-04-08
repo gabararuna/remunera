@@ -47,47 +47,45 @@ export function ResultsDashboard({ data, onRestart }: Props) {
 
   return (
     <div className="animate-fade-in" style={{ animationDelay: '0.1s' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
-        <div className="glass-card" style={{ padding: '1.5rem', textAlign: 'center', borderTop: '4px solid #ef4444' }}>
-          <h3 style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Salário Líquido (1+2+3+4)</h3>
-          <p style={{ fontSize: '1.8rem', fontWeight: 700, color: 'var(--text-primary)' }}>{formatBRL(totais.liquido)}</p>
-          <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Média R$: {formatBRL(totais.liquido / months)}/mês</p>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem', marginBottom: '2.5rem' }}>
+        <div className="glass-card" style={{ padding: '1.5rem', textAlign: 'center', borderTop: '4px solid #e5b121', background: 'rgba(239, 68, 68, 0.02)' }}>
+          <h3 style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Salário Líquido (1+2+3)</h3>
+          <p style={{ fontSize: '1.4rem', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '0.25rem' }}>{formatBRL(totais.liquido)}</p>
+          <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', background: 'rgba(239, 68, 68, 0.08)', padding: '2px 10px', borderRadius: '99px', display: 'inline-block' }}>Média: {formatBRL(totais.liquido / months)}/mês</p>
         </div>
-        <div className="glass-card" style={{ padding: '1.5rem', textAlign: 'center', borderTop: '4px solid var(--accent-color)' }}>
-          <h3 style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Saldo em Conta (5+6)</h3>
-          <p style={{ fontSize: '1.8rem', fontWeight: 700, color: 'var(--text-primary)' }}>{formatBRL(totais.saldo_conta)}</p>
-          <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Média R$: {formatBRL(totais.saldo_conta / months)}/mês</p>
+        <div className="glass-card" style={{ padding: '1.5rem', textAlign: 'center', borderTop: '4px solid var(--accent-color)', background: 'rgba(0, 191, 165, 0.02)' }}>
+          <h3 style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Saldo em Conta (4+5)</h3>
+          <p style={{ fontSize: '1.4rem', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '0.25rem' }}>{formatBRL(totais.saldo_conta)}</p>
+          <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', background: 'rgba(0, 191, 165, 0.08)', padding: '2px 10px', borderRadius: '99px', display: 'inline-block' }}>Média: {formatBRL(totais.saldo_conta / months)}/mês</p>
         </div>
-        <div className="glass-card" style={{ padding: '1.5rem', textAlign: 'center', borderTop: '4px solid #8b5cf6' }}>
-          <h3 style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Saldo Real (7+8+9)</h3>
-          <p style={{ fontSize: '1.8rem', fontWeight: 700, color: 'var(--text-primary)' }}>{formatBRL(totais.saldo_real)}</p>
-          <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Média R$: {formatBRL(totais.saldo_real / months)}/mês</p>
+        <div className="glass-card" style={{ padding: '1.5rem', textAlign: 'center', borderTop: '4px solid #8b5cf6', background: 'rgba(139, 92, 246, 0.02)' }}>
+          <h3 style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Saldo Real (6+7)</h3>
+          <p style={{ fontSize: '1.4rem', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '0.25rem' }}>{formatBRL(totais.saldo_real)}</p>
+          <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', background: 'rgba(139, 92, 246, 0.08)', padding: '2px 10px', borderRadius: '99px', display: 'inline-block' }}>Média: {formatBRL(totais.saldo_real / months)}/mês</p>
         </div>
-        <div className="glass-card" style={{ padding: '1.5rem', textAlign: 'center', borderTop: '4px solid var(--success-color)' }}>
-          <h3 style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Saldo Total (10+11)</h3>
-          <p style={{ fontSize: '1.8rem', fontWeight: 700, color: 'var(--text-primary)' }}>{formatBRL(totais.saldo_total)}</p>
-          <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Média R$: {formatBRL(totais.saldo_total / months)}/mês</p>
+        <div className="glass-card" style={{ padding: '1.5rem', textAlign: 'center', borderTop: '4px solid #2889C9', background: 'rgba(16, 185, 129, 0.02)' }}>
+          <h3 style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Saldo Total (8+9)</h3>
+          <p style={{ fontSize: '1.4rem', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '0.25rem' }}>{formatBRL(totais.saldo_total)}</p>
+          <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', background: 'rgba(16, 185, 129, 0.08)', padding: '2px 10px', borderRadius: '99px', display: 'inline-block' }}>Média: {formatBRL(totais.saldo_total / months)}/mês</p>
         </div>
       </div>
 
-      <div className="glass-card" style={{ padding: '1rem', overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
-        <h2 style={{ marginBottom: '1.5rem', paddingLeft: '1rem' }}>Timeline Financeira ({months} meses)</h2>
-        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'right' }}>
+      <div className="glass-card custom-scrollbar" style={{ padding: '1rem', overflowX: 'auto', WebkitOverflowScrolling: 'touch', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.04)' }}>
+        <h2 style={{ padding: '1.5rem 1.5rem 0.5rem', fontSize: '1rem', fontWeight: 500, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Projeção Timeline ({months} meses)</h2>
+        <table className="luxury-table tabular">
           <thead>
-            <tr style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
-              <th className="sticky-header" style={{ padding: '1rem', textAlign: 'left', whiteSpace: 'nowrap' }}>Evento</th>
-              <th className="sticky-header" style={{ padding: '1rem', whiteSpace: 'nowrap' }}>(1) Salário Bruto</th>
-              <th className="sticky-header" style={{ padding: '1rem', whiteSpace: 'nowrap' }}>(2) INSS</th>
-              <th className="sticky-header" style={{ padding: '1rem', whiteSpace: 'nowrap' }}>(3) IRRF</th>
-              <th className="sticky-header" style={{ padding: '1rem', whiteSpace: 'nowrap' }}>(4) Descontos</th>
-              <th className="sticky-header" style={{ padding: '1rem', color: '#ef4444', whiteSpace: 'nowrap' }}>(5) Salário Líquido</th>
-              <th className="sticky-header" style={{ padding: '1rem', whiteSpace: 'nowrap' }}>(6) Ticket</th>
-              <th className="sticky-header" style={{ padding: '1rem', color: 'var(--accent-color)', whiteSpace: 'nowrap' }}>(7) Saldo Conta</th>
-              <th className="sticky-header" style={{ padding: '1rem', whiteSpace: 'nowrap' }}>(8) Previdência</th>
-              <th className="sticky-header" style={{ padding: '1rem', whiteSpace: 'nowrap' }}>(9) FGTS</th>
-              <th className="sticky-header" style={{ padding: '1rem', color: '#8b5cf6', whiteSpace: 'nowrap' }}>(10) Saldo Real</th>
-              <th className="sticky-header" style={{ padding: '1rem', whiteSpace: 'nowrap' }}>(11) Ben. Indiretos</th>
-              <th className="sticky-header" style={{ padding: '1rem', color: 'var(--success-color)', whiteSpace: 'nowrap' }}>(12) Saldo Total</th>
+            <tr>
+              <th style={{ textAlign: 'left', minWidth: '120px' }}>Evento</th>
+              <th>Bruto (1)</th>
+              <th style={{ color: '#ef4444' }}>Impostos (2)</th>
+              <th style={{ color: '#ef4444' }}>Desc (3)</th>
+              <th style={{ color: '#e5b121' }}>Líquido (4)</th>
+              <th>Ticket (5)</th>
+              <th style={{ color: 'var(--accent-color)' }}>Saldo Conta (6)</th>
+              <th>Previdência (7)</th>
+              <th style={{ color: '#8b5cf6' }}>Saldo Real (8)</th>
+              <th>Indiretos (9)</th>
+              <th style={{ color: '#2889C9' }}>Saldo Total (10)</th>
             </tr>
           </thead>
           <tbody>
@@ -96,42 +94,46 @@ export function ResultsDashboard({ data, onRestart }: Props) {
               const saldo_real = saldo_conta + r.previdencia + r.fgts;
               const saldo_total = saldo_real + r.beneficios;
               return (
-                <tr key={i} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', transition: 'background 0.2s', cursor: 'default', fontSize: '0.9rem' }} className="table-row-hover">
-                  <td style={{ padding: '1rem', textAlign: 'left', whiteSpace: 'nowrap' }}>
-                    <div style={{ color: 'var(--text-primary)', marginBottom: '4px' }}>{r.data.toLocaleDateString('pt-BR')}</div>
-                    <div style={{ color: 'var(--accent-color)', fontSize: '0.85rem' }}>{r.descricao}</div>
+                <tr key={i} className="table-row-item">
+                  <td style={{ textAlign: 'left' }}>
+                    <div style={{ color: 'var(--text-primary)', fontWeight: 500 }}>{r.data.toLocaleDateString('pt-BR', {
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric'
+                    })}</div>
+                    <div style={{ fontSize: '0.65rem', color: 'var(--text-primary)', opacity: 0.6 }}>{r.descricao}</div>
                   </td>
-                  <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{formatBRL(r.bruto)}</td>
-                  <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{r.inss > 0 ? `-${formatBRL(r.inss)}` : 'R$ 0,00'}</td>
-                  <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{r.irrf > 0 ? `-${formatBRL(r.irrf)}` : 'R$ 0,00'}</td>
-                  <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{r.descontos > 0 ? `-${formatBRL(r.descontos)}` : 'R$ 0,00'}</td>
-                  <td style={{ padding: '1rem', color: '#ef4444', fontWeight: 600, whiteSpace: 'nowrap' }}>{formatBRL(r.liquido)}</td>
-                  <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{formatBRL(r.ticket)}</td>
-                  <td style={{ padding: '1rem', color: 'var(--accent-color)', fontWeight: 600, whiteSpace: 'nowrap' }}>{formatBRL(saldo_conta)}</td>
-                  <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{formatBRL(r.previdencia)}</td>
-                  <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{formatBRL(r.fgts)}</td>
-                  <td style={{ padding: '1rem', color: '#8b5cf6', fontWeight: 600, whiteSpace: 'nowrap' }}>{formatBRL(saldo_real)}</td>
-                  <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{formatBRL(r.beneficios)}</td>
-                  <td style={{ padding: '1rem', fontWeight: 600, color: 'var(--success-color)', whiteSpace: 'nowrap' }}>{formatBRL(saldo_total)}</td>
+                  <td>{formatBRL(r.bruto)}</td>
+                  <td style={{ color: '#ef4444', opacity: (r.inss + r.irrf) > 0 ? 0.8 : 0.2 }}>
+                    {(r.inss + r.irrf) > 0 ? `-${formatBRL(r.inss + r.irrf)}` : '—'}
+                  </td>
+                  <td style={{ color: '#ef4444', opacity: r.descontos > 0 ? 0.8 : 0.2 }}>
+                    {r.descontos > 0 ? `-${formatBRL(r.descontos)}` : '—'}
+                  </td>
+                  <td style={{ color: '#e5b121', fontWeight: 500 }}>{formatBRL(r.liquido)}</td>
+                  <td>{formatBRL(r.ticket)}</td>
+                  <td style={{ color: 'var(--accent-color)', fontWeight: 500 }}>{formatBRL(saldo_conta)}</td>
+                  <td>{formatBRL(r.previdencia + r.fgts)}</td>
+                  <td style={{ color: '#8b5cf6', fontWeight: 500 }}>{formatBRL(saldo_real)}</td>
+                  <td style={{ opacity: r.beneficios > 0 ? 1 : 0.2 }}>{formatBRL(r.beneficios)}</td>
+                  <td style={{ color: '#2889C9', fontWeight: 500 }}>{formatBRL(saldo_total)}</td>
                 </tr>
               )
             })}
           </tbody>
           <tfoot>
-            <tr style={{ background: 'rgba(0,0,0,0.3)', fontWeight: 'bold', borderTop: '2px solid var(--accent-color)', fontSize: '0.95rem' }}>
-              <td style={{ padding: '1rem', textAlign: 'left', whiteSpace: 'nowrap' }}>Totais</td>
-              <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{formatBRL(totais.bruto)}</td>
-              <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{totais.inss > 0 ? `-${formatBRL(totais.inss)}` : 'R$ 0,00'}</td>
-              <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{totais.irrf > 0 ? `-${formatBRL(totais.irrf)}` : 'R$ 0,00'}</td>
-              <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{totais.descontos > 0 ? `-${formatBRL(totais.descontos)}` : 'R$ 0,00'}</td>
-              <td style={{ padding: '1rem', color: '#ef4444', whiteSpace: 'nowrap' }}>{formatBRL(totais.liquido)}</td>
-              <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{formatBRL(totais.ticket)}</td>
-              <td style={{ padding: '1rem', color: 'var(--accent-color)', whiteSpace: 'nowrap' }}>{formatBRL(totais.saldo_conta)}</td>
-              <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{formatBRL(totais.previdencia)}</td>
-              <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{formatBRL(totais.fgts)}</td>
-              <td style={{ padding: '1rem', color: '#8b5cf6', whiteSpace: 'nowrap' }}>{formatBRL(totais.saldo_real)}</td>
-              <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{formatBRL(totais.beneficios)}</td>
-              <td style={{ padding: '1rem', color: 'var(--success-color)', whiteSpace: 'nowrap' }}>{formatBRL(totais.saldo_total)}</td>
+            <tr style={{ background: 'rgba(255,255,255,0.02)', fontWeight: 500 }}>
+              <td style={{ textAlign: 'left' }}>Totais</td>
+              <td>{formatBRL(totais.bruto)}</td>
+              <td style={{ color: '#ef4444' }}>-{formatBRL(totais.inss + totais.irrf)}</td>
+              <td style={{ color: '#ef4444' }}>-{formatBRL(totais.descontos)}</td>
+              <td style={{ color: '#e5b121' }}>{formatBRL(totais.liquido)}</td>
+              <td>{formatBRL(totais.ticket)}</td>
+              <td style={{ color: 'var(--accent-color)' }}>{formatBRL(totais.saldo_conta)}</td>
+              <td>{formatBRL(totais.previdencia + totais.fgts)}</td>
+              <td style={{ color: '#8b5cf6' }}>{formatBRL(totais.saldo_real)}</td>
+              <td>{formatBRL(totais.beneficios)}</td>
+              <td style={{ color: '#10b981' }}>{formatBRL(totais.saldo_total)}</td>
             </tr>
           </tfoot>
         </table>
@@ -139,78 +141,78 @@ export function ResultsDashboard({ data, onRestart }: Props) {
 
       {/* ── SEÇÃO DE RESCISÃO ─────────────────────────────────── */}
       {rescisao && (
-        <div className="glass-card animate-fade-in" style={{ padding: '1.5rem', marginTop: '2rem', borderTop: `4px solid ${tipoInfo.color}` }}>
-          <div style={{ marginBottom: '1.5rem' }}>
-              <h2 style={{ color: tipoInfo.color, marginBottom: '2px' }}>Simulação de Rescisão</h2>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>{tipoInfo.label}</p>
+        <div className="glass-card animate-fade-in" style={{ padding: '2.5rem', marginTop: '3rem', borderTop: `6px solid ${tipoInfo.color}`, borderRadius: '24px' }}>
+          <div style={{ marginBottom: '2.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div>
+              <h2 style={{ color: tipoInfo.color, marginBottom: '4px', fontSize: '1.4rem', fontWeight: 500 }}>Simulação de Rescisão</h2>
+              <div style={{ display: 'inline-block', background: `${tipoInfo.color}15`, color: tipoInfo.color, padding: '3px 10px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 500 }}>{tipoInfo.label}</div>
+            </div>
+            <div style={{ textAlign: 'right' }}>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginBottom: '2px' }}>Líquido Total a Receber</p>
+              <p style={{ fontSize: '1.6rem', fontWeight: 500, color: tipoInfo.color }}>{formatBRL(rescisao.totalLiquido)}</p>
+            </div>
           </div>
 
           {/* Cards de resumo rescisório */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
-            <div style={{ padding: '1rem', background: 'rgba(0,0,0,0.2)', borderRadius: '12px', textAlign: 'center' }}>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '4px' }}>Total Bruto Rescisório</p>
-              <p style={{ fontSize: '1.4rem', fontWeight: 700 }}>{formatBRL(rescisao.totalBruto)}</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', marginBottom: '2.5rem' }}>
+            <div style={{ padding: '1.5rem', background: 'rgba(255,255,255,0.02)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)', textAlign: 'center' }}>
+              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>Total Bruto</p>
+              <p style={{ fontSize: '1.6rem', fontWeight: 600 }}>{formatBRL(rescisao.totalBruto)}</p>
             </div>
-            <div style={{ padding: '1rem', background: 'rgba(0,0,0,0.2)', borderRadius: '12px', textAlign: 'center' }}>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '4px' }}>INSS Rescisório</p>
-              <p style={{ fontSize: '1.4rem', fontWeight: 700, color: '#ef4444' }}>-{formatBRL(rescisao.totalInss)}</p>
-            </div>
-            <div style={{ padding: '1rem', background: 'rgba(0,0,0,0.2)', borderRadius: '12px', textAlign: 'center' }}>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '4px' }}>IRRF Rescisório</p>
-              <p style={{ fontSize: '1.4rem', fontWeight: 700, color: '#ef4444' }}>-{formatBRL(rescisao.totalIrrf)}</p>
-            </div>
-            <div style={{ padding: '1rem', background: `${tipoInfo.color}18`, borderRadius: '12px', textAlign: 'center', border: `1px solid ${tipoInfo.color}40` }}>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '4px' }}>Líquido a Receber</p>
-              <p style={{ fontSize: '1.4rem', fontWeight: 700, color: tipoInfo.color }}>{formatBRL(rescisao.totalLiquido)}</p>
+            <div style={{ padding: '1.5rem', background: 'rgba(255,255,255,0.02)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)', textAlign: 'center' }}>
+              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>Total Descontos (Encargos)</p>
+              <p style={{ fontSize: '1.6rem', fontWeight: 600, color: '#ef4444' }}>-{formatBRL(rescisao.totalInss + rescisao.totalIrrf)}</p>
             </div>
             {rescisao.multaFgts > 0 && (
-              <div style={{ padding: '1rem', background: 'rgba(16,185,129,0.1)', borderRadius: '12px', textAlign: 'center', border: '1px solid rgba(16,185,129,0.3)' }}>
-                <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '4px' }}>Multa FGTS (40%)</p>
-                <p style={{ fontSize: '1.4rem', fontWeight: 700, color: '#10b981' }}>{formatBRL(rescisao.multaFgts)}</p>
+              <div style={{ padding: '1.5rem', background: 'rgba(16,185,129,0.08)', borderRadius: '16px', textAlign: 'center', border: '1px solid rgba(16,185,129,0.2)' }}>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>Multa FGTS (40%)</p>
+                <p style={{ fontSize: '1.6rem', fontWeight: 600, color: '#10b981' }}>{formatBRL(rescisao.multaFgts)}</p>
               </div>
             )}
             {rescisao.fgtsTotal > 0 && (
-              <div style={{ padding: '1rem', background: 'rgba(0,0,0,0.2)', borderRadius: '12px', textAlign: 'center' }}>
-                <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '4px' }}>FGTS Total a Sacar</p>
-                <p style={{ fontSize: '1.4rem', fontWeight: 700 }}>{formatBRL(rescisao.fgtsTotal)}</p>
-                <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>saldo + multa 40%</p>
+              <div style={{ padding: '1.5rem', background: 'rgba(255,255,255,0.02)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)', textAlign: 'center' }}>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '4px' }}>FGTS Total a Sacar</p>
+                <p style={{ fontSize: '1.6rem', fontWeight: 600, color: '#10b981' }}>{formatBRL(rescisao.fgtsTotal)}</p>
+                <p style={{ fontSize: '0.75rem', opacity: 0.6 }}>saldo acumulado + multa</p>
               </div>
             )}
           </div>
 
           {/* Tabela de verbas */}
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'right', fontSize: '0.9rem' }}>
+          <div className="custom-scrollbar" style={{ overflowX: 'auto', borderRadius: '16px', background: 'rgba(255,255,255,0.01)', padding: '1rem' }}>
+            <table className="luxury-table tabular" style={{ width: '100%', borderCollapse: 'separate', borderSpacing: '0 4px', textAlign: 'right', fontSize: '0.95rem' }}>
               <thead>
                 <tr style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
-                  <th className="sticky-header" style={{ padding: '0.75rem 1rem', textAlign: 'left', whiteSpace: 'nowrap' }}>Verba Rescisória</th>
-                  <th className="sticky-header" style={{ padding: '0.75rem 1rem', whiteSpace: 'nowrap' }}>Bruto</th>
-                  <th className="sticky-header" style={{ padding: '0.75rem 1rem', whiteSpace: 'nowrap' }}>INSS</th>
-                  <th className="sticky-header" style={{ padding: '0.75rem 1rem', whiteSpace: 'nowrap' }}>IRRF</th>
-                  <th className="sticky-header" style={{ padding: '0.75rem 1rem', color: tipoInfo.color, whiteSpace: 'nowrap' }}>Líquido</th>
-                  <th className="sticky-header" style={{ padding: '0.75rem 1rem', whiteSpace: 'nowrap' }}>Tributável?</th>
+                  <th style={{ padding: '1rem', textAlign: 'left', whiteSpace: 'nowrap' }}>Verba Rescisória</th>
+                  <th style={{ padding: '1rem', whiteSpace: 'nowrap' }}>Bruto</th>
+                  <th style={{ padding: '1rem', whiteSpace: 'nowrap' }}>INSS</th>
+                  <th style={{ padding: '1rem', whiteSpace: 'nowrap' }}>IRRF</th>
+                  <th style={{ padding: '1rem', color: tipoInfo.color, whiteSpace: 'nowrap' }}>Líquido</th>
+                  <th style={{ padding: '1rem', whiteSpace: 'nowrap', textAlign: 'center' }}>Tributável?</th>
                 </tr>
               </thead>
               <tbody>
                 {rescisao.verbas.map((v, i) => (
-                  <tr key={i} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', transition: 'background 0.2s' }} className="table-row-hover">
-                    <td style={{ padding: '0.75rem 1rem', textAlign: 'left', whiteSpace: 'nowrap' }}>
-                      <span style={{ color: 'var(--text-primary)' }}>{v.descricao}</span>
+                  <tr key={i} style={{ background: 'rgba(255,255,255,0.02)', transition: 'all 0.3s ease' }} className="table-row-item">
+                    <td style={{ padding: '1.25rem 1rem', textAlign: 'left', whiteSpace: 'nowrap', borderRadius: '12px 0 0 12px' }}>
+                      <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{v.descricao}</span>
                       {v.tooltip && (
-                        <span style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '2px' }}>{v.tooltip}</span>
+                        <span style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '4px', opacity: 0.7 }}>{v.tooltip}</span>
                       )}
                     </td>
-                    <td style={{ padding: '0.75rem 1rem', whiteSpace: 'nowrap' }}>{formatBRL(v.bruto)}</td>
-                    <td style={{ padding: '0.75rem 1rem', whiteSpace: 'nowrap', color: v.inss > 0 ? '#ef4444' : undefined }}>{v.inss > 0 ? `-${formatBRL(v.inss)}` : 'R$ 0,00'}</td>
-                    <td style={{ padding: '0.75rem 1rem', whiteSpace: 'nowrap', color: v.irrf > 0 ? '#ef4444' : undefined }}>{v.irrf > 0 ? `-${formatBRL(v.irrf)}` : 'R$ 0,00'}</td>
-                    <td style={{ padding: '0.75rem 1rem', fontWeight: 600, color: tipoInfo.color, whiteSpace: 'nowrap' }}>{formatBRL(v.liquido)}</td>
-                    <td style={{ padding: '0.75rem 1rem', whiteSpace: 'nowrap' }}>
+                    <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{formatBRL(v.bruto)}</td>
+                    <td style={{ padding: '1rem', whiteSpace: 'nowrap', color: '#ef4444', opacity: v.inss > 0 ? 1 : 0.3 }}>{v.inss > 0 ? `-${formatBRL(v.inss)}` : '-'}</td>
+                    <td style={{ padding: '1rem', whiteSpace: 'nowrap', color: '#ef4444', opacity: v.irrf > 0 ? 1 : 0.3 }}>{v.irrf > 0 ? `-${formatBRL(v.irrf)}` : '-'}</td>
+                    <td style={{ padding: '1rem', fontWeight: 700, color: tipoInfo.color, whiteSpace: 'nowrap' }}>{formatBRL(v.liquido)}</td>
+                    <td style={{ padding: '1rem', whiteSpace: 'nowrap', textAlign: 'center', borderRadius: '0 12px 12px 0' }}>
                       <span style={{
-                        padding: '2px 8px',
-                        borderRadius: '99px',
-                        fontSize: '0.75rem',
-                        background: v.tributavel ? 'rgba(239,68,68,0.15)' : 'rgba(16,185,129,0.15)',
+                        padding: '4px 10px',
+                        borderRadius: '6px',
+                        fontSize: '0.8rem',
+                        fontWeight: 600,
+                        background: v.tributavel ? 'rgba(239,68,68,0.1)' : 'rgba(16,185,129,0.1)',
                         color: v.tributavel ? '#ef4444' : '#10b981',
+                        border: `1px solid ${v.tributavel ? 'rgba(239,68,68,0.1)' : 'rgba(16,185,129,0.1)'}`,
                       }}>
                         {v.tributavel ? 'Sim' : 'Isento'}
                       </span>
@@ -219,47 +221,56 @@ export function ResultsDashboard({ data, onRestart }: Props) {
                 ))}
               </tbody>
               <tfoot>
-                <tr style={{ background: 'rgba(0,0,0,0.3)', fontWeight: 'bold', borderTop: `2px solid ${tipoInfo.color}`, fontSize: '0.95rem' }}>
-                  <td style={{ padding: '0.75rem 1rem', textAlign: 'left' }}>TOTAL</td>
-                  <td style={{ padding: '0.75rem 1rem', whiteSpace: 'nowrap' }}>{formatBRL(rescisao.totalBruto)}</td>
-                  <td style={{ padding: '0.75rem 1rem', whiteSpace: 'nowrap', color: '#ef4444' }}>{rescisao.totalInss > 0 ? `-${formatBRL(rescisao.totalInss)}` : 'R$ 0,00'}</td>
-                  <td style={{ padding: '0.75rem 1rem', whiteSpace: 'nowrap', color: '#ef4444' }}>{rescisao.totalIrrf > 0 ? `-${formatBRL(rescisao.totalIrrf)}` : 'R$ 0,00'}</td>
-                  <td style={{ padding: '0.75rem 1rem', fontWeight: 700, color: tipoInfo.color, whiteSpace: 'nowrap' }}>{formatBRL(rescisao.totalLiquido)}</td>
-                  <td></td>
+                <tr style={{ background: 'rgba(255,255,255,0.05)', fontWeight: 'bold', borderTop: `2px solid ${tipoInfo.color}`, fontSize: '1.05rem' }}>
+                  <td style={{ padding: '1.5rem 1rem', textAlign: 'left', borderRadius: '12px 0 0 12px' }}>TOTAIS RESCISÓRIOS</td>
+                  <td style={{ padding: '1.5rem 1rem', whiteSpace: 'nowrap' }}>{formatBRL(rescisao.totalBruto)}</td>
+                  <td style={{ padding: '1.5rem 1rem', whiteSpace: 'nowrap', color: '#ef4444' }}>-{formatBRL(rescisao.totalInss)}</td>
+                  <td style={{ padding: '1.5rem 1rem', whiteSpace: 'nowrap', color: '#ef4444' }}>-{formatBRL(rescisao.totalIrrf)}</td>
+                  <td style={{ padding: '1.5rem 1rem', fontWeight: 600, color: tipoInfo.color, whiteSpace: 'nowrap' }}>{formatBRL(rescisao.totalLiquido)}</td>
+                  <td style={{ borderRadius: '0 12px 12px 0' }}></td>
                 </tr>
               </tfoot>
             </table>
           </div>
 
-          {/* Aviso sobre seguro-desemprego (apenas sem justa causa) */}
+          {/* Aviso sobre seguro-desemprego */}
           {data.tipo_demissao === 'sem_justa_causa' && (
-            <div style={{ marginTop: '1.5rem', padding: '1rem', background: 'rgba(16,185,129,0.08)', borderRadius: '12px', border: '1px solid rgba(16,185,129,0.2)', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-              <strong style={{ color: '#10b981' }}>Seguro-Desemprego</strong>
-              <p style={{ marginTop: '4px' }}>
-                Na demissão sem justa causa você tem direito ao seguro-desemprego, sujeito a carência mínima de emprego formal.
-                O valor depende do salário médio dos últimos 3 meses e pode ser consultado no app Carteira de Trabalho Digital (Gov.br).
-              </p>
+            <div style={{ marginTop: '2.5rem', padding: '1.5rem', background: 'rgba(16,185,129,0.05)', borderRadius: '16px', border: '1px solid rgba(16,185,129,0.15)', fontSize: '0.9rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1.6, display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+              <span style={{ fontSize: '1.5rem' }}>📋</span>
+              <div>
+                <strong style={{ color: '#10b981', display: 'block', marginBottom: '4px', fontSize: '1rem' }}>Seguro-Desemprego & FGTS</strong>
+                <p>
+                  Como a demissão é sem justa causa, você tem direito ao saque integral do FGTS acumulado e ao seguro-desemprego.
+                  O valor do seguro depende da média dos seus últimos 3 salários. Verifique seu saldo e elegibilidade no app <strong>Carteira de Trabalho Digital</strong> ou <strong>FGTS</strong>.
+                </p>
+              </div>
             </div>
           )}
         </div>
       )}
 
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '3rem' }}>
-        <button className="btn-primary" onClick={onRestart}>&larr; Recalcular Premissas</button>
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '4rem' }}>
+        <button className="btn-secondary" onClick={onRestart}>Refazer Simulação</button>
       </div>
 
       <style>{`
-        .table-row-hover:hover {
-          background: rgba(255,255,255,0.05);
+        .table-row-item:hover {
+          background: rgba(255,255,255,0.06) !important;
+          transform: translateY(-1px);
         }
         .sticky-header {
           position: sticky;
           top: 0;
-          background-color: #0f172a;
+          background: #000;
           z-index: 10;
-          border-bottom: 1px solid var(--card-border);
+        }
+        @media (max-width: 768px) {
+           .sticky-header {
+              position: static;
+           }
         }
       `}</style>
     </div>
   );
 }
+

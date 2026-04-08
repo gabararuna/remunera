@@ -11,10 +11,10 @@ interface Props {
 export function SalarioStep({ data, update, onNext, onBack }: Props) {
   return (
     <div className="glass-card animate-fade-in">
-      <h2 style={{ marginBottom: '1.5rem', color: 'var(--accent-color)' }}>Passo 2: Regras de Pagamento</h2>
+      <h2 style={{ marginBottom: '1.5rem', color: 'var(--accent-color)', fontSize: '1.15rem', fontWeight: 500 }}>Passo 2: Regras de Pagamento</h2>
 
-      <div style={{ marginBottom: '1rem' }}>
-        <p style={{ marginBottom: '0.5rem', fontSize: '0.9rem' }}>Quando você recebe o salário?</p>
+      <div style={{ marginBottom: '1.5rem' }}>
+        <label className="field-label">Quando você recebe o salário?</label>
         <select
           className="input-field"
           value={data.dia_pagamento.toString()}
@@ -25,21 +25,21 @@ export function SalarioStep({ data, update, onNext, onBack }: Props) {
         </select>
       </div>
 
-      <div style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
+      <div style={{ marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '12px', padding: '1rem', background: 'rgba(255, 255, 255, 0.02)', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
         <input
           type="checkbox"
           id="tem_adiantamento"
           checked={data.tem_adiantamento}
           onChange={(e) => update('tem_adiantamento', e.target.checked)}
-          style={{ width: '18px', height: '18px' }}
+          style={{ width: '20px', height: '20px', accentColor: 'var(--accent-color)' }}
         />
-        <label htmlFor="tem_adiantamento">Recebo adiantamento salarial (Vale)</label>
+        <label htmlFor="tem_adiantamento" style={{ cursor: 'pointer', fontSize: '0.95rem' }}>Recebo adiantamento salarial (Vale)</label>
       </div>
 
       {data.tem_adiantamento && (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+        <div className="animate-fade-in" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
           <div>
-            <p style={{ marginBottom: '0.5rem', fontSize: '0.9rem' }}>Valor do Adiantamento (R$)</p>
+            <label className="field-label">Valor do Adiantamento (R$)</label>
             <MathInput
               value={data.valor_adiantamento || 0}
               onChange={(val) => update('valor_adiantamento', val)}
@@ -47,7 +47,7 @@ export function SalarioStep({ data, update, onNext, onBack }: Props) {
             />
           </div>
           <div>
-            <p style={{ marginBottom: '0.5rem', fontSize: '0.9rem' }}>Dia do Adiantamento</p>
+            <label className="field-label">Dia do Adiantamento</label>
             <MathInput
               value={data.dia_adiantamento || 0}
               onChange={(val) => update('dia_adiantamento', val)}
@@ -58,8 +58,8 @@ export function SalarioStep({ data, update, onNext, onBack }: Props) {
       )}
 
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2rem' }}>
-        <button className="btn-primary" style={{ background: 'transparent', border: '1px solid var(--card-border)' }} onClick={onBack}>&larr; Voltar</button>
-        <button className="btn-primary" onClick={onNext}>Próximo Passo &rarr;</button>
+        <button className="btn-secondary" onClick={onBack}>Voltar</button>
+        <button className="btn-primary" onClick={onNext}>Próximo Passo</button>
       </div>
     </div>
   );
