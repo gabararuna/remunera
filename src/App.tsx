@@ -27,7 +27,7 @@ export default function App() {
           <h1 className="shimmer-text" style={{ fontSize: '2.2rem', fontWeight: 500, letterSpacing: '-0.01em', marginBottom: '0.5rem' }}>
             Remunera
           </h1>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', fontWeight: 400, opacity: 0.8 }}>Projete sua remuneração real CLT de forma inteligente</p>
+          <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.875rem', fontWeight: 300, letterSpacing: '0.025em', lineHeight: '1.6' }}>Projete sua remuneração real CLT de forma inteligente</p>
 
           {step < 7 && (
             <div style={{ marginTop: '2.5rem', display: 'flex', justifyContent: 'center', gap: '10px' }}>
