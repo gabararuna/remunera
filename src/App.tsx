@@ -21,7 +21,7 @@ export default function App() {
       <div className="orb-container" />
       <div style={{ maxWidth: step === 7 ? '1200px' : '800px', width: '100%', margin: '0 auto', padding: step === 7 ? '2rem 2rem' : '2rem 1rem', transition: 'max-width 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)', boxSizing: 'border-box', position: 'relative', zIndex: 1 }}>
         <header style={{ textAlign: 'center', marginBottom: '3rem', marginTop: '2rem' }} className="animate-fade-in">
-          <a href="https://numera.gabrielararuna.com/" target="_blank" rel="noopener noreferrer" className="author-btn" style={{ marginBottom: '2rem' }}>
+          <a href="https://www.gruponumera.com/" target="_blank" rel="noopener noreferrer" className="author-btn" style={{ marginBottom: '2rem' }}>
             Criado por Numera
           </a>
           <h1 className="shimmer-text" style={{ fontSize: '2.2rem', fontWeight: 500, letterSpacing: '-0.01em', marginBottom: '0.5rem' }}>
