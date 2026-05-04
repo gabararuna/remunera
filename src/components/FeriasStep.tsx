@@ -9,6 +9,8 @@ interface Props {
 }
 
 export function FeriasStep({ data, update, onNext, onBack }: Props) {
+  const isPJ = data.regime_trabalho === 'pj';
+
   const handleAddFerias = () => {
     update('ferias', [...data.ferias, { inicio: new Date(), dias: 0 }]);
   };
@@ -34,7 +36,14 @@ export function FeriasStep({ data, update, onNext, onBack }: Props) {
 
   return (
     <div className="glass-card animate-fade-in">
-      <h2 style={{ marginBottom: '1.5rem', color: 'var(--accent-color)', fontSize: '1.15rem', fontWeight: 500 }}>Passo 3: Suas Férias</h2>
+      <h2 style={{ marginBottom: '1rem', color: 'var(--accent-color)', fontSize: '1.15rem', fontWeight: 500 }}>Passo 3: {isPJ ? 'Planejamento de Recesso (PJ)' : 'Suas Férias'}</h2>
+
+      {isPJ && (
+        <div style={{ marginBottom: '1.5rem', padding: '1rem 1.25rem', background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.2)', borderRadius: '12px', fontSize: '0.875rem', color: 'rgba(255,255,255,0.65)', lineHeight: 1.6 }}>
+          <strong style={{ color: '#f59e0b', display: 'block', marginBottom: '4px' }}>PJ não possui férias remuneradas por lei.</strong>
+          Os períodos informados abaixo <em>não</em> geram receita de férias na projeção — apenas registram quando você não trabalhará. O pró-labore continuará sendo calculado normalmente. Use esta etapa como planejamento de agenda ou pule para o próximo passo.
+        </div>
+      )}
 
       <div style={{ marginBottom: '2.5rem', display: 'flex', flexDirection: 'column', gap: '15px', padding: '1.5rem', background: 'rgba(255, 255, 255, 0.02)', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>

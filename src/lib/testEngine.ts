@@ -2,6 +2,10 @@ import { calcularProjecao } from './calculator';
 import type { SalaryParams } from '../types';
 
 const dadosFixos: SalaryParams = {
+  regime_trabalho: 'clt',
+  distribuicao_lucros: 0,
+  aliquota_inss_pj: 11,
+  aliquota_rpps_estadual: 14,
   data_inicio: new Date(2027, 0, 1),
   meses_projecao: 12,
   aumento_percentual: 5,

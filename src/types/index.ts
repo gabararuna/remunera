@@ -4,8 +4,16 @@ export interface VacationPeriod {
 }
 
 export type TipoDemissao = 'pedido_demissao' | 'justa_causa' | 'sem_justa_causa';
+export type RegimeTrabalho = 'clt' | 'pj' | 'servidor_federal' | 'servidor_estadual';
 
 export interface SalaryParams {
+  regime_trabalho: RegimeTrabalho;
+  // PJ
+  distribuicao_lucros: number;      // distribuição de lucros mensal (isenta IR no Simples)
+  aliquota_inss_pj: number;         // alíquota INSS contribuinte individual: 5, 11 ou 20
+  // Servidor Estadual
+  aliquota_rpps_estadual: number;   // alíquota RPPS fixa do estado (%)
+
   data_inicio: Date;
   meses_projecao: number;
   aumento_percentual: number;

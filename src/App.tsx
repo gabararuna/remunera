@@ -56,7 +56,7 @@ export default function App() {
           <h1 className="shimmer-teal welcome-title">Remunera</h1>
 
           <p className="welcome-subtitle">
-            Projete sua remuneração real CLT de forma inteligente.
+            Projete sua remuneração real — CLT, PJ ou Servidor Público.
           </p>
 
           <button onClick={nextStep} className="btn-primary welcome-cta">
@@ -78,7 +78,7 @@ export default function App() {
           <h1 className="shimmer-text" style={{ fontSize: 'clamp(2rem, 5vw, 2.8rem)', fontWeight: 500, letterSpacing: '-0.01em', marginBottom: '0.5rem' }}>
             Remunera
           </h1>
-          <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.875rem', fontWeight: 300, letterSpacing: '0.025em', lineHeight: '1.6' }}>Projete sua remuneração real CLT de forma inteligente</p>
+          <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.875rem', fontWeight: 300, letterSpacing: '0.025em', lineHeight: '1.6' }}>Projete sua remuneração real de forma inteligente</p>
 
           {step < 7 && (
             <div style={{ marginTop: '2.5rem', display: 'flex', justifyContent: 'center', gap: '10px' }}>

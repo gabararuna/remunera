@@ -2,6 +2,11 @@ import { useState, useEffect } from 'react';
 import type { SalaryParams } from '../types';
 
 const defaultParams: SalaryParams = {
+  regime_trabalho: 'clt',
+  distribuicao_lucros: 0,
+  aliquota_inss_pj: 11,
+  aliquota_rpps_estadual: 14,
+
   data_inicio: new Date(),
   meses_projecao: 12,
   aumento_percentual: 0,
@@ -58,6 +63,10 @@ export function useSalaryForm() {
         if (!parsed.data_inicio) parsed.data_inicio = defaultParams.data_inicio;
         if (parsed.meses_projecao === undefined) parsed.meses_projecao = defaultParams.meses_projecao;
         if (parsed.aumento_percentual === undefined) parsed.aumento_percentual = defaultParams.aumento_percentual;
+        if (!parsed.regime_trabalho) parsed.regime_trabalho = defaultParams.regime_trabalho;
+        if (parsed.distribuicao_lucros === undefined) parsed.distribuicao_lucros = defaultParams.distribuicao_lucros;
+        if (parsed.aliquota_inss_pj === undefined) parsed.aliquota_inss_pj = defaultParams.aliquota_inss_pj;
+        if (parsed.aliquota_rpps_estadual === undefined) parsed.aliquota_rpps_estadual = defaultParams.aliquota_rpps_estadual;
 
         return { ...defaultParams, ...parsed };
       }

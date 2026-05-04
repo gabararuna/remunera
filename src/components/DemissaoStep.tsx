@@ -28,6 +28,11 @@ const TIPO_LABELS: Record<TipoDemissao, { label: string; color: string; desc: st
 };
 
 export function DemissaoStep({ data, update, onNext, onBack }: Props) {
+  const regime = data.regime_trabalho || 'clt';
+  const isPJ = regime === 'pj';
+  const isServidor = regime === 'servidor_federal' || regime === 'servidor_estadual';
+  const naoAplicavel = isPJ || isServidor;
+
   const tipo = data.tipo_demissao;
   const isSemJustaCausa = tipo === 'sem_justa_causa';
   const isPedido = tipo === 'pedido_demissao';
@@ -44,31 +49,59 @@ export function DemissaoStep({ data, update, onNext, onBack }: Props) {
       : null;
 
   const canProceed =
+    naoAplicavel ||
     !data.simular_demissao ||
     (!!data.data_demissao && !!data.data_admissao);
 
   return (
     <div className="glass-card animate-fade-in">
-      <h2 style={{ marginBottom: '1rem', color: 'var(--accent-color)', fontSize: '1.15rem', fontWeight: 500 }}>Passo 6: Simulação de Demissão</h2>
+      <h2 style={{ marginBottom: '1rem', color: 'var(--accent-color)', fontSize: '1.15rem', fontWeight: 500 }}>Passo 6: Simulação de Encerramento</h2>
       <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', marginBottom: '2.5rem' }}>
         Opcional — simule quanto você receberia em caso de encerramento do contrato.
       </p>
 
-      {/* Toggle principal */}
-      <div style={{ marginBottom: '2.5rem', padding: '1.5rem', background: 'rgba(255, 255, 255, 0.02)', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.05)', display: 'flex', alignItems: 'center', gap: '16px' }}>
-        <input
-          type="checkbox"
-          id="simular_demissao"
-          checked={data.simular_demissao}
-          onChange={(e) => update('simular_demissao', e.target.checked)}
-          style={{ width: '22px', height: '22px', accentColor: 'var(--accent-color)', flexShrink: 0 }}
-        />
-        <label htmlFor="simular_demissao" style={{ fontWeight: 400, cursor: 'pointer', fontSize: '0.95rem' }}>
-          Quero simular o recebimento de verbas rescisórias
-        </label>
-      </div>
+      {/* PJ: nota explicativa */}
+      {isPJ && (
+        <div style={{ marginBottom: '2rem', padding: '1.5rem', background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.2)', borderRadius: '16px', fontSize: '0.9rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1.6 }}>
+          <strong style={{ color: '#f59e0b', display: 'block', marginBottom: '8px', fontSize: '1rem' }}>PJ não possui rescisão CLT</strong>
+          <p style={{ marginBottom: '0' }}>
+            O encerramento de uma empresa PJ não gera verbas rescisórias como aviso prévio, multa de FGTS ou 13º proporcional.
+            O encerramento deve ser formalizado junto à Receita Federal e à Junta Comercial.
+            Para planejamento, considere reservar fundos mensais equivalentes a uma "rescisão" para segurança.
+          </p>
+        </div>
+      )}
 
-      {data.simular_demissao && (
+      {/* Servidor: nota explicativa */}
+      {isServidor && (
+        <div style={{ marginBottom: '2rem', padding: '1.5rem', background: 'rgba(139,92,246,0.06)', border: '1px solid rgba(139,92,246,0.2)', borderRadius: '16px', fontSize: '0.9rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1.6 }}>
+          <strong style={{ color: '#8b5cf6', display: 'block', marginBottom: '8px', fontSize: '1rem' }}>Servidores Públicos Estáveis não têm rescisão CLT</strong>
+          <p style={{ marginBottom: '0' }}>
+            {regime === 'servidor_federal'
+              ? 'Servidores federais efetivos possuem estabilidade após 3 anos (art. 41 CF). O desligamento ocorre por exoneração voluntária, aposentadoria ou processo administrativo disciplinar — sem as verbas rescisórias do regime CLT.'
+              : 'Servidores estaduais efetivos possuem estabilidade constitucional. O desligamento ocorre por exoneração, aposentadoria ou processo administrativo, conforme o Estatuto do servidor do estado.'
+            }
+          </p>
+        </div>
+      )}
+
+      {/* Toggle + simulação de rescisão — visível apenas para CLT */}
+      {!naoAplicavel && (
+        <>
+        <div style={{ marginBottom: '2.5rem', padding: '1.5rem', background: 'rgba(255, 255, 255, 0.02)', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.05)', display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <input
+            type="checkbox"
+            id="simular_demissao"
+            checked={data.simular_demissao}
+            onChange={(e) => update('simular_demissao', e.target.checked)}
+            style={{ width: '22px', height: '22px', accentColor: 'var(--accent-color)', flexShrink: 0 }}
+          />
+          <label htmlFor="simular_demissao" style={{ fontWeight: 400, cursor: 'pointer', fontSize: '0.95rem' }}>
+            Quero simular o recebimento de verbas rescisórias
+          </label>
+        </div>
+
+        {data.simular_demissao && (
         <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
 
           {/* Tipo de demissão */}
@@ -228,6 +261,8 @@ export function DemissaoStep({ data, update, onNext, onBack }: Props) {
           </div>
 
         </div>
+        )}
+        </>
       )}
 
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2.5rem' }}>

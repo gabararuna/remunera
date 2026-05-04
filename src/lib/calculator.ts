@@ -1,5 +1,30 @@
 import type { SalaryParams, Receipt, RescisaoResult, RescisaoVerba } from '../types';
 
+// ── RPPS Federal (EC 103/2019) — alíquotas progressivas sobre o salário de contribuição
+export const TABELA_RPPS_FEDERAL = [
+  { limite: 1412.00, aliquota: 7.5 },
+  { limite: 2666.68, aliquota: 9.0 },
+  { limite: 4000.03, aliquota: 12.0 },
+  { limite: 7786.02, aliquota: 14.0 },
+  { limite: Infinity, aliquota: 16.5 }, // acima do teto: alíquota suplementar / Funpresp
+];
+
+export function calcular_rpps_federal(base_calculo: number): number {
+  let total = 0.0;
+  let restante = base_calculo;
+  let anterior = 0.0;
+  for (const faixa of TABELA_RPPS_FEDERAL) {
+    const slice = Math.min(restante, faixa.limite - anterior);
+    total += slice * (faixa.aliquota / 100);
+    restante -= slice;
+    if (restante <= 0) break;
+    anterior = faixa.limite;
+  }
+  return Number(total.toFixed(2));
+}
+
+export const TETO_RGPS = 8475.55; // teto do salário de contribuição RGPS 2025
+
 export const TABELA_INSS = [
   { limite: 1621, aliquota: 7.5 },
   { limite: 2902.84, aliquota: 9.0 },
@@ -111,11 +136,29 @@ export function calcularProjecao(dados: SalaryParams): Receipt[] {
 
   const invalidDate = (d: any) => !d || isNaN(new Date(d).getTime());
 
+  const regime = dados.regime_trabalho || 'clt';
+  const isPJ = regime === 'pj';
+  const isServidor = regime === 'servidor_federal' || regime === 'servidor_estadual';
+
+  // Contribuição previdenciária conforme regime
+  const calcContribPrevidenciaria = (base: number): number => {
+    if (isPJ) {
+      const aliq = (dados.aliquota_inss_pj || 11) / 100;
+      return Number((Math.min(base, TETO_RGPS) * aliq).toFixed(2));
+    }
+    if (regime === 'servidor_federal') return calcular_rpps_federal(base);
+    if (regime === 'servidor_estadual') {
+      return Number((base * (dados.aliquota_rpps_estadual || 14) / 100).toFixed(2));
+    }
+    return calcular_inss(base); // CLT
+  };
+
   const increaseMultiplier = 1 + ((dados.aumento_percentual || 0) / 100);
 
   let dias_de_ferias_por_ano_mes: { [key: string]: number } = {};
 
-  const feriasValidas = (dados.ferias || []).filter(f => !invalidDate(f.inicio) && f.dias > 0);
+  // PJ não possui férias remuneradas por lei — pula cálculo de férias
+  const feriasValidas = isPJ ? [] : (dados.ferias || []).filter(f => !invalidDate(f.inicio) && f.dias > 0);
 
   feriasValidas.forEach((periodo, i) => {
     const dias = periodo.dias;
@@ -207,14 +250,15 @@ export function calcularProjecao(dados: SalaryParams): Receipt[] {
 
     const hasRaise = appliesRaise(dataAtual, dados.mes_aumento);
 
+    // PJ não tem 13º automático; Servidores têm (igual ao CLT)
     // Pula 13º quando há simulação de demissão (será calculado como 13º proporcional na rescisão)
-    if (!dados.simular_demissao && !projected13ForYear[ano_corrente] && (mes === 11 || mes === 12)) {
+    if (!isPJ && !dados.simular_demissao && !projected13ForYear[ano_corrente] && (mes === 11 || mes === 12)) {
       projected13ForYear[ano_corrente] = true;
       const dec13Date = new Date(ano_corrente, 11, 1);
       const objRaise = appliesRaise(dec13Date, dados.mes_aumento);
       const salarioBase13 = objRaise ? dados.salario_bruto * increaseMultiplier : dados.salario_bruto;
 
-      const inss_13 = calcular_inss(salarioBase13);
+      const inss_13 = calcContribPrevidenciaria(salarioBase13);
       const previdenciaPara13 = objRaise ? dados.previdencia_valor * increaseMultiplier : dados.previdencia_valor;
       const prev_13 = dados.incide_prev_13 ? previdenciaPara13 : 0;
       const irrf_13 = calcular_irrf(salarioBase13 - inss_13 - prev_13, dados.dependentes);
@@ -228,8 +272,20 @@ export function calcularProjecao(dados: SalaryParams): Receipt[] {
     if (!invalidDate(dados.data_plr)) {
       let plrDate = new Date(dados.data_plr);
       if (plrDate.getFullYear() === ano_corrente && plrDate.getMonth() + 1 === mes) {
-        const retidoPLR = calcular_irrf(dados.plr_bruto, 0, TABELA_IRRF_PLR);
-        recebimentos.push({ data: new Date(dados.data_plr), descricao: "PLR", bruto: dados.plr_bruto, inss: 0, irrf: retidoPLR, descontos: 0, liquido: dados.plr_bruto - retidoPLR, ticket: 0, fgts: 0, previdencia: 0, beneficios: 0 });
+        let retidoPLR = 0;
+        let descPlr = "PLR";
+        if (isPJ) {
+          // Distribuição de lucros: isenta de IR no Simples Nacional
+          retidoPLR = 0;
+          descPlr = "Distribuição Extra";
+        } else if (isServidor) {
+          // Gratificação: tabela IRRF normal (não PLR)
+          retidoPLR = calcular_irrf(dados.plr_bruto, dados.dependentes);
+          descPlr = "Gratificação Extraord.";
+        } else {
+          retidoPLR = calcular_irrf(dados.plr_bruto, 0, TABELA_IRRF_PLR);
+        }
+        recebimentos.push({ data: new Date(dados.data_plr), descricao: descPlr, bruto: dados.plr_bruto, inss: 0, irrf: retidoPLR, descontos: 0, liquido: dados.plr_bruto - retidoPLR, ticket: 0, fgts: 0, previdencia: 0, beneficios: 0 });
       }
     }
 
@@ -253,15 +309,18 @@ export function calcularProjecao(dados: SalaryParams): Receipt[] {
       continue;
     }
 
-    const salario_bruto_mes = (currentSalarioBruto / 30) * dias_trabalhados;
-    const previdencia_mes = (previdencia_mensal / 30) * dias_trabalhados;
-    const outros_desc_mes = (dados.outros_descontos / 30) * dias_trabalhados;
+    // Para PJ: pró-labore é o mesmo independente de "dias trabalhados" (salário fixo mensal)
+    const dias_fator = isPJ ? 30 : dias_trabalhados;
+    const salario_bruto_mes = (currentSalarioBruto / 30) * dias_fator;
+    const previdencia_mes = (previdencia_mensal / 30) * dias_fator;
+    const outros_desc_mes = (dados.outros_descontos / 30) * dias_fator;
     const beneficios_total_mes = dados.plano_saude + dados.plano_odonto + dados.seguro_vida;
-    const beneficios_proporcionais = (beneficios_total_mes / 30) * dias_trabalhados;
+    const beneficios_proporcionais = (beneficios_total_mes / 30) * dias_fator;
 
-    const inss_mes = calcular_inss(salario_bruto_mes);
+    const inss_mes = calcContribPrevidenciaria(salario_bruto_mes);
     const irrf_mes = calcular_irrf(salario_bruto_mes - inss_mes - previdencia_mes, dados.dependentes);
-    const fgts_mes = calcular_fgts(salario_bruto_mes);
+    // FGTS existe apenas no CLT
+    const fgts_mes = (!isPJ && !isServidor) ? calcular_fgts(salario_bruto_mes) : 0;
 
     const salario_liq_total_original = salario_bruto_mes - inss_mes - irrf_mes - previdencia_mes - outros_desc_mes;
 
@@ -286,7 +345,15 @@ export function calcularProjecao(dados: SalaryParams): Receipt[] {
 
     const bruto_saldo = salario_bruto_mes - valor_vale_a_pagar;
     const liquido_final = bruto_saldo - inss_mes - irrf_mes - outros_desc_mes - previdencia_mes;
-    const desc = dias_trabalhados === 30 ? "Salário Integral" : `Saldo Salário (${dias_trabalhados}d)`;
+
+    let desc: string;
+    if (isPJ) {
+      desc = "Pró-labore";
+    } else if (isServidor) {
+      desc = dias_trabalhados === 30 ? "Vencimento Integral" : `Vencimento (${dias_trabalhados}d)`;
+    } else {
+      desc = dias_trabalhados === 30 ? "Salário Integral" : `Saldo Salário (${dias_trabalhados}d)`;
+    }
 
     recebimentos.push({
       data: obter_data_pagamento(ano_corrente, mes, dados.dia_pagamento),
@@ -301,6 +368,24 @@ export function calcularProjecao(dados: SalaryParams): Receipt[] {
       fgts: fgts_mes,
       beneficios: beneficios_proporcionais
     });
+
+    // PJ: adiciona distribuição de lucros mensal (isenta de IR no Simples Nacional)
+    if (isPJ && dados.distribuicao_lucros > 0) {
+      const distLucros = hasRaise ? dados.distribuicao_lucros * increaseMultiplier : dados.distribuicao_lucros;
+      recebimentos.push({
+        data: obter_data_pagamento(ano_corrente, mes, dados.dia_pagamento),
+        descricao: "Distribuição de Lucros",
+        bruto: distLucros,
+        inss: 0,
+        irrf: 0,
+        descontos: 0,
+        liquido: distLucros,
+        ticket: 0,
+        previdencia: 0,
+        fgts: 0,
+        beneficios: 0,
+      });
+    }
   }
 
   let validStart = new Date(startMeses.getFullYear(), startMeses.getMonth(), 1);
@@ -344,6 +429,11 @@ export function calcularFeriasProporcionaisMeses(dataAdmissao: Date, dataDemissa
 }
 
 export function calcularRescisao(dados: SalaryParams): RescisaoResult {
+  // Rescisão CLT não se aplica a PJ nem Servidores
+  if (dados.regime_trabalho && dados.regime_trabalho !== 'clt') {
+    return { verbas: [], totalBruto: 0, totalInss: 0, totalIrrf: 0, totalLiquido: 0, diasAvisoPrevio: 0, multaFgts: 0, fgtsTotal: 0 };
+  }
+
   const {
     tipo_demissao,
     data_demissao,

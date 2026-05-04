@@ -15,6 +15,13 @@ const TIPO_LABELS: Record<string, { label: string; color: string }> = {
   sem_justa_causa: { label: 'Demissão Sem Justa Causa', color: '#10b981' },
 };
 
+const REGIME_LABELS: Record<string, { label: string; color: string }> = {
+  clt: { label: 'CLT', color: '#00bfa5' },
+  pj: { label: 'Pessoa Jurídica', color: '#f59e0b' },
+  servidor_federal: { label: 'Servidor Federal', color: '#8b5cf6' },
+  servidor_estadual: { label: 'Servidor Estadual', color: '#3b82f6' },
+};
+
 export function ResultsDashboard({ data, onRestart }: Props) {
   const receitas = useMemo(() => calcularProjecao(data), [data]);
   const rescisao = useMemo(() => data.simular_demissao ? calcularRescisao(data) : null, [data]);
@@ -44,6 +51,14 @@ export function ResultsDashboard({ data, onRestart }: Props) {
 
   const months = data.meses_projecao > 0 ? data.meses_projecao : 12;
   const tipoInfo = TIPO_LABELS[data.tipo_demissao] ?? TIPO_LABELS['pedido_demissao'];
+  const regime = data.regime_trabalho || 'clt';
+  const regimeInfo = REGIME_LABELS[regime] ?? REGIME_LABELS['clt'];
+  const isCLT = regime === 'clt';
+  const isPJ = regime === 'pj';
+
+  // Labels adaptados por regime
+  const impostoLabel = isCLT ? 'INSS + IRRF' : isPJ ? 'INSS + IRRF' : 'RPPS + IRRF';
+  const saldoRealLabel = isCLT ? 'Prev. + FGTS' : 'Previdência';
 
   return (
     <div className="animate-fade-in" style={{ animationDelay: '0.1s' }}>
@@ -71,18 +86,21 @@ export function ResultsDashboard({ data, onRestart }: Props) {
       </div>
 
       <div className="glass-card custom-scrollbar" style={{ padding: '1rem', overflowX: 'auto', WebkitOverflowScrolling: 'touch', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.04)' }}>
-        <h2 style={{ padding: '1.5rem 1.5rem 0.5rem', fontSize: '1rem', fontWeight: 500, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Projeção Timeline ({months} meses)</h2>
+        <div style={{ padding: '1.5rem 1.5rem 0.5rem', display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+          <h2 style={{ fontSize: '1rem', fontWeight: 500, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.1em', margin: 0 }}>Projeção Timeline ({months} meses)</h2>
+          <span style={{ padding: '3px 10px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 600, background: `${regimeInfo.color}18`, color: regimeInfo.color, border: `1px solid ${regimeInfo.color}30` }}>{regimeInfo.label}</span>
+        </div>
         <table className="luxury-table tabular">
           <thead>
             <tr>
               <th style={{ textAlign: 'left', minWidth: '120px' }}>Evento</th>
               <th>Bruto (1)</th>
-              <th style={{ color: '#ef4444' }}>Impostos (2)</th>
+              <th style={{ color: '#ef4444' }}>{impostoLabel} (2)</th>
               <th style={{ color: '#ef4444' }}>Desc (3)</th>
               <th style={{ color: '#e5b121' }}>Líquido (4)</th>
               <th>Ticket (5)</th>
               <th style={{ color: 'var(--accent-color)' }}>Saldo Conta (6)</th>
-              <th>Previdência (7)</th>
+              <th>{saldoRealLabel} (7)</th>
               <th style={{ color: '#8b5cf6' }}>Saldo Real (8)</th>
               <th>Indiretos (9)</th>
               <th style={{ color: '#2889C9' }}>Saldo Total (10)</th>
