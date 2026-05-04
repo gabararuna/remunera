@@ -15,17 +15,29 @@ export function DescontosStep({ data, update, onNext, onBack }: Props) {
 
   return (
     <div className="glass-card animate-fade-in">
-      <h2 style={{ marginBottom: '1.5rem', color: 'var(--accent-color)', fontSize: '1.15rem', fontWeight: 500 }}>Passo 5: Descontos e Dependentes</h2>
+      <h2 style={{ marginBottom: '0.4rem', color: 'var(--accent-color)', fontSize: '1.15rem', fontWeight: 500 }}>
+        Passo 5: Descontos e Dependentes
+      </h2>
+      <p style={{ marginBottom: '1.75rem', fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+        {isPJ
+          ? 'Informe despesas fixas e contribuições previdenciárias. Elas impactam o resultado líquido mensal.'
+          : 'Informe descontos em folha, dependentes e previdência privada para calcular o IRRF corretamente.'}
+      </p>
 
-      <div style={{ marginBottom: '2.5rem' }}>
+      {/* Dependentes */}
+      <div style={{ marginBottom: '2rem', padding: '1.5rem', background: 'rgba(255,255,255,0.02)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
         <label className="field-label">Número de Dependentes (IRRF)</label>
+        <p style={{ marginBottom: '0.75rem', fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+          Cada dependente reduz a base do IRRF em R$ 189,59/mês (2024). Filhos, cônjuge e outros seguem as regras da Receita Federal.
+        </p>
         <MathInput
           value={data.dependentes}
           onChange={(val) => update('dependentes', Math.floor(Math.max(0, val)))}
+          placeholder="Ex: 0"
         />
       </div>
 
-      {/* PJ: seletor de alíquota INSS contribuinte individual */}
+      {/* PJ: alíquota INSS */}
       {isPJ && (
         <div style={{ marginBottom: '2rem', padding: '1.5rem', background: 'rgba(255,255,255,0.02)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
           <p style={{ marginBottom: '0.5rem', fontSize: '1rem', fontWeight: 500 }}>Alíquota INSS Contribuinte Individual</p>
@@ -68,26 +80,25 @@ export function DescontosStep({ data, update, onNext, onBack }: Props) {
         </div>
       )}
 
+      {/* Descontos fixos */}
       <div style={{ marginBottom: '2rem', padding: '1.5rem', background: 'rgba(255, 255, 255, 0.02)', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
-        <p style={{ marginBottom: '0.5rem', fontSize: '1rem', fontWeight: 500 }}>
-          {isPJ ? 'Despesas Fixas PJ (Mensal R$)' : 'Descontos em Folha Fixos (Mensal R$)'}
-        </p>
-        <p style={{ marginBottom: '1.25rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+        <label className="field-label">{isPJ ? 'Despesas Fixas PJ (R$/mês)' : 'Desconto em Folha — Benefícios (R$/mês)'}</label>
+        <p style={{ marginBottom: '1.25rem', fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
           {isPJ
-            ? 'Inclua contador, softwares, taxas e outros custos fixos mensais da empresa.'
-            : 'Inclua aqui o valor que você paga pelos benefícios, o valor descontado na sua folha.'
-          }
+            ? 'Inclua contador, softwares, taxas bancárias e outros custos fixos mensais da empresa.'
+            : 'Valor total descontado em folha pelo uso dos benefícios (plano de saúde, odonto, etc.). É o que a empresa desconta — diferente do custo total do plano.'}
         </p>
         <MathInput
           value={data.outros_descontos || 0}
           onChange={(val) => update('outros_descontos', val)}
-          placeholder={isPJ ? 'Ex: 200.00 (contador)' : 'Ex: 150.00'}
+          placeholder={isPJ ? 'Ex: 200.00 (contador)' : 'Ex: 14.83'}
         />
       </div>
 
+      {/* Previdência privada */}
       <div style={{ marginBottom: '1.5rem', padding: '1.5rem', background: 'rgba(255, 255, 255, 0.02)', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
         <label className="field-label">
-          {isPJ ? 'Previdência Privada / PGBL (Mensal R$)' : isServidor ? 'Previdência Complementar (Mensal R$)' : 'Previdência Privada (Mensal R$)'}
+          {isPJ ? 'Previdência Privada / PGBL (R$/mês)' : isServidor ? 'Previdência Complementar (R$/mês)' : 'Previdência Privada (R$/mês)'}
         </label>
         {data.regime_trabalho === 'servidor_federal' && (
           <p style={{ marginBottom: '0.75rem', fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
@@ -99,22 +110,32 @@ export function DescontosStep({ data, update, onNext, onBack }: Props) {
             Contribuição ao fundo complementar do seu estado (ex: Prevcom-RS, SPPrev, Funprevsco, Funprev-PR, FUNAPE, Funprev-Bahia), se houver, ou plano privado adicional.
           </p>
         )}
-        <div style={{ marginBottom: '1.5rem' }}>
+        {!isServidor && (
+          <p style={{ marginBottom: '0.75rem', fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+            {isPJ
+              ? 'Contribuição mensal ao PGBL ou VGBL. Dedutível no IR até 12% da renda bruta no modelo completo.'
+              : 'Contribuição mensal ao PGBL ou VGBL. Dedutível no IR até 12% da renda bruta anual no modelo completo.'}
+          </p>
+        )}
+        <div style={{ marginBottom: '1.25rem' }}>
           <MathInput
             value={data.previdencia_valor || 0}
             onChange={(val) => update('previdencia_valor', val)}
+            placeholder="Ex: 167.14"
           />
         </div>
         {!isPJ && !isServidor && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
             <input
               type="checkbox"
               id="incide_prev_13"
               checked={data.incide_prev_13}
               onChange={(e) => update('incide_prev_13', e.target.checked)}
-              style={{ width: '20px', height: '20px', accentColor: 'var(--accent-color)' }}
+              style={{ width: '20px', height: '20px', accentColor: 'var(--accent-color)', marginTop: '2px', flexShrink: 0 }}
             />
-            <label htmlFor="incide_prev_13" style={{ cursor: 'pointer', fontSize: '0.95rem' }}>Descontar previdência também no 13º?</label>
+            <label htmlFor="incide_prev_13" style={{ cursor: 'pointer', fontSize: '0.9rem', lineHeight: 1.4 }}>
+              Descontar previdência também no 13º salário?
+            </label>
           </div>
         )}
       </div>
