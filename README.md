@@ -1,73 +1,37 @@
-# React + TypeScript + Vite
+# Remunera
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Calculadora de remuneração real que detalha e compara o custo e os benefícios de diferentes vínculos empregatícios — **CLT**, **PJ** e **Servidor Público** — para que profissionais tomem decisões informadas.
 
-Currently, two official plugins are available:
+**Demo:** [remunera.com.br](https://remunera.com.br)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Funcionalidades
 
-## React Compiler
+- Wizard em 7 etapas com experiência guiada
+- Análise completa para CLT: FGTS, 13°, férias, INSS e IRRF
+- Análise para PJ: pró-labore, distribuição de lucros e impostos sobre serviços
+- Análise para Servidor Público: estabilidade, aposentadoria e benefícios
+- Configuração detalhada de benefícios (plano de saúde, VR, VA, VT)
+- Deduções e descontos personalizáveis
+- Cálculo de rescisão e verbas indenizatórias
+- Dashboard final com comparativo entre modalidades
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Stack
 
-## Expanding the ESLint configuration
+- **Frontend:** React 19 + Vite + TypeScript + Tailwind CSS
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Instalação
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+git clone https://github.com/seu-usuario/remunera.git
+cd remunera
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## SEO
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Inclui `public/sitemap.xml`. Submeta no [Google Search Console](https://search.google.com/search-console) após publicar. Atualize o domínio no arquivo antes do deploy.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Licença
+
+MIT
